@@ -37,7 +37,7 @@
             </a>
             @endif
 
-            <a href="#" class="card">
+            <a href="/playground.html" class="card">
                 <div class="card-icon">🚀</div>
                 <div class="roadmap-week">Инструмент</div>
                 <h3>Песочница</h3>
