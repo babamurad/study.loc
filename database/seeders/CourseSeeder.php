@@ -1,43 +1,106 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Module;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class CourseSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $course = Course::create([
-            'title' => 'Основы Web-разработки',
-            'slug' => 'web-development-basics',
-            'description' => 'Полный курс по HTML, CSS и основам JavaScript для начинающих разработчиков.',
+            'title' => 'Laravel 12 + Livewire 3 Masterclass',
+            'slug' => 'laravel-12-livewire-3-masterclass',
+            'description' => 'A comprehensive course to master Laravel 12 and Livewire 3 from scratch.',
             'is_published' => true,
         ]);
 
-        $module = Module::create([
+        $module1 = Module::create([
             'course_id' => $course->id,
-            'title' => 'Неделя 1: Фундамент и Текст',
+            'title' => 'Module 1: Laravel Fundamentals',
             'position' => 1,
         ]);
 
+        $module2 = Module::create([
+            'course_id' => $course->id,
+            'title' => 'Module 2: Advanced Livewire',
+            'position' => 2,
+        ]);
+
         $lessons = [
-            ['title' => 'Как работает браузер', 'slug' => 'how-browser-works', 'content' => '<h2>Принцип работы браузера</h2><p>Браузер — это программа, которая запрашивает HTML-страницу с сервера и отображает её.</p><p>Ключевые этапы:</p><ol><li>Запрос страницы</li><li>Получение HTML</li><li>Парсинг DOM</li><li>Отрисовка</li></ol>', 'position' => 1],
-            ['title' => 'Структура HTML-документа', 'slug' => 'html-document-structure', 'content' => '<h2>Базовая структура</h2><pre><code>&lt;!DOCTYPE html&gt;\n&lt;html&gt;\n  &lt;head&gt;...&lt;/head&gt;\n  &lt;body&gt;...&lt;/body&gt;\n&lt;/html&gt;</code></pre>', 'position' => 2],
-            ['title' => 'Заголовки и параграфы', 'slug' => 'headings-and-paragraphs', 'content' => '<h2>Иерархия заголовков</h2><p>Теги h1-h6 создают уровни важности текста.</p><h3>Практика</h3><p>Создайте страницу о себе, используя заголовки h1 и h2.</p>', 'position' => 3],
-            ['title' => 'Списки и форматирование', 'slug' => 'lists-and-formatting', 'content' => '<h2>Виды списков</h2><ul><li>ul — маркированный</li><li>ol — нумерованный</li><li>dl — список определений</li></ul>', 'position' => 4],
-            ['title' => 'Первый проект', 'slug' => 'first-project', 'content' => '<h2>Создаём сайт-резюме</h2><p>Применим все полученные знания для создания личной страницы.</p><p>К концу урока у вас будет готовое резюме!</p>', 'position' => 5],
+            // Module 1
+            1 => [
+                'module_id' => $module1->id,
+                'title' => 'Installation & Setup',
+                'content' => '<h1>Welcome to the course!</h1><p>Let\'s start by setting up our Laravel project.</p>',
+            ],
+            [
+                'module_id' => $module1->id,
+                'title' => 'Routing Basics',
+                'content' => '<h2>Understanding Routes</h2><p>Learn how to define and handle routes in Laravel.</p>',
+            ],
+            [
+                'module_id' => $module1->id,
+                'title' => 'Eloquent ORM Introduction',
+                'content' => '<h2>Working with Databases</h2><p>An introduction to Laravel\'s powerful ORM, Eloquent.</p>',
+            ],
+            [
+                'module_id' => $module1->id,
+                'title' => 'Blade Templating',
+                'content' => '<h2>Frontend with Blade</h2><p>Master the Blade templating engine for beautiful views.</p>',
+            ],
+            [
+                'module_id' => $module1->id,
+                'title' => 'Your First Livewire Component',
+                'content' => '<h2>Intro to Livewire</h2><p>Let\'s build our first reactive component with Livewire.</p>',
+            ],
+            // Module 2
+            [
+                'module_id' => $module2->id,
+                'title' => 'Reactivity & Data Binding',
+                'content' => '<h2>Deep Dive into Reactivity</h2><p>Understand how `wire:model` works under the hood.</p>',
+            ],
+            [
+                'module_id' => $module2->id,
+                'title' => 'Events & Listeners',
+                'content' => '<h2>Component Communication</h2><p>Learn how to communicate between Livewire components using events.</p>',
+            ],
+            [
+                'module_id' => $module2->id,
+                'title' => 'Forms & Validation',
+                'content' => '<h2>Real-time Validation</h2><p>Create beautiful and reactive forms with real-time validation.</p>',
+            ],
+            [
+                'module_id' => $module2->id,
+                'title' => 'File Uploads',
+                'content' => '<h2>Handling File Uploads</h2><p>Learn how to handle file uploads with Livewire seamlessly.</p>',
+            ],
+            [
+                'module_id' => $module2->id,
+                'title' => 'Deployment',
+                'content' => '<h2>Go Live!</h2><p>Finally, let\'s deploy our application to production.</p>',
+            ],
         ];
 
-        foreach ($lessons as $lesson) {
-            Lesson::create(array_merge($lesson, [
+        foreach ($lessons as $position => $lessonData) {
+            Lesson::create([
                 'course_id' => $course->id,
-                'module_id' => $module->id,
+                'module_id' => $lessonData['module_id'],
+                'title' => $lessonData['title'],
+                'slug' => Str::slug($lessonData['title']),
+                'content' => $lessonData['content'],
+                'position' => $position,
                 'is_published' => true,
-            ]));
+            ]);
         }
     }
 }

@@ -1,13 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire;
 
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\LessonQuiz;
+use App\Models\QuizQuestion;
+use App\Models\User;
+use App\Models\UserQuizAttempt;
 use App\Services\LessonAccessService;
-use Illuminate\Http\RedirectHandler;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Illuminate\Database\Eloquent\Collection;
 
 #[Layout('layouts.front')]
 class LessonShow extends Component
@@ -16,43 +24,146 @@ class LessonShow extends Component
     public Lesson $lesson;
     public bool $justCompleted = false;
 
-    public function mount(Course $course, Lesson $lesson)
+    // Quiz Properties
+    public ?LessonQuiz $quiz = null;
+    public Collection $questions;
+    public array $userAnswers = [];
+    public int $currentQuestionIndex = 0;
+    public ?array $quizResult = null;
+    public bool $quizInProgress = false;
+
+    public function mount(Course $course, Lesson $lesson, LessonAccessService $accessService): void
     {
         $this->course = $course;
-        $this->lesson = $lesson;
-    }
+        $this->lesson = $lesson->load('module.course', 'quiz.questions.answers'); 
 
-    public function complete()
-    {
-        $accessService = app(LessonAccessService::class);
+        /** @var User|null $user */
+        $user = Auth::user();
 
-        if (!$accessService->canAccess(auth()->user(), $this->lesson)) {
-            return redirect()->route('courses.show', $this->course)->with('error', 'Урок недоступен');
+        if (!$user || !$accessService->canAccess($user, $this->lesson)) {
+            abort(403, 'У вас нет доступа к этому уроку.');
         }
 
-        $this->lesson->progress()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            ['status' => 'completed', 'completed_at' => now()]
-        );
+        $this->quiz = $this->lesson->quiz;
+    }
 
-        $this->justCompleted = true;
-        $this->dispatch('lesson-completed');
+    public function startQuiz(): void
+    {
+        if ($this->quiz) {
+            $this->quizInProgress = true;
+            $this->questions = $this->quiz->questions()->orderBy('order')->get();
+            $this->currentQuestionIndex = 0;
+            $this->userAnswers = [];
+            $this->quizResult = null;
+        }
+    }
+
+    public function selectAnswer(int $questionId, int $answerId): void
+    {
+        $this->userAnswers[$questionId] = $answerId;
+    }
+
+    public function nextQuestion(): void
+    {
+        if ($this->currentQuestionIndex < $this->questions->count() - 1) {
+            $this->currentQuestionIndex++;
+        }
+    }
+
+    public function previousQuestion(): void
+    {
+        if ($this->currentQuestionIndex > 0) {
+            $this->currentQuestionIndex--;
+        }
+    }
+
+    public function submitQuiz(): void
+    {
+        $correctAnswers = 0;
+        foreach ($this->questions as $question) {
+            $correctAnswerId = $question->answers()->where('is_correct', true)->value('id');
+            if (isset($this->userAnswers[$question->id]) && $this->userAnswers[$question->id] === $correctAnswerId) {
+                $correctAnswers++;
+            }
+        }
+
+        $score = (int) round(($correctAnswers / $this->questions->count()) * 100);
+        $passed = $score >= $this->quiz->pass_threshold;
+
+        $this->quizResult = [
+            'score' => $score,
+            'passed' => $passed,
+        ];
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        UserQuizAttempt::create([
+            'user_id' => $user->id,
+            'lesson_quiz_id' => $this->quiz->id,
+            'score' => $score,
+            'passed' => $passed,
+        ]);
+
+        $this->quizInProgress = false;
+        
+        if ($passed) {
+            $this->complete(app(LessonAccessService::class));
+        }
+    }
+
+    public function retakeQuiz(): void
+    {
+        $this->startQuiz();
+    }
+
+
+    public function complete(LessonAccessService $accessService): void
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if ($this->quiz) {
+            $latestAttempt = UserQuizAttempt::where('user_id', $user->id)
+                ->where('lesson_quiz_id', $this->quiz->id)
+                ->latest()
+                ->first();
+
+            if (!$latestAttempt || !$latestAttempt->passed) {
+                session()->flash('error', 'Вы должны сначала пройти тест, чтобы завершить урок.');
+                return;
+            }
+        }
+
+        if ($accessService->completeLesson($user, $this->lesson)) {
+            $this->justCompleted = true;
+            $this->dispatch('lesson-completed');
+        } else {
+             session()->flash('error', 'Не удалось завершить урок.');
+        }
     }
 
     public function getNextLessonProperty(): ?Lesson
     {
-        return Lesson::where('course_id', $this->course->id)
-            ->where('position', $this->lesson->position + 1)
+        return Lesson::query()
+            ->where('course_id', $this->course->id)
+            ->where('position', '>', $this->lesson->position)
+            ->orderBy('position')
             ->first();
     }
 
-    public function getProgressPercentProperty(): int
+    public function getProgressPercentProperty(LessonAccessService $accessService): int
     {
-        return app(LessonAccessService::class)->getProgressPercent(auth()->user(), $this->course->id);
+        /** @var User $user */
+        $user = Auth::user();
+        return $accessService->getProgressPercent($user, $this->course->id);
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.lesson-show');
+        return view('livewire.lesson-show', [
+            'progressPercent' => $this->progressPercent,
+            'nextLesson' => $this->nextLesson,
+        ]);
     }
 }

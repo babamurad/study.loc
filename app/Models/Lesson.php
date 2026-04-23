@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Lesson extends Model
 {
@@ -45,8 +46,29 @@ class Lesson extends Model
         return $this->hasMany(UserLessonProgress::class);
     }
 
+    public function quiz(): HasOne
+    {
+        return $this->hasOne(LessonQuiz::class);
+    }
+
     public function isCompletedBy(User $user): bool
     {
-        return $this->progress()->where('user_id', $user->id)->exists();
+        return $this->progress()->where('user_id', $user->id)->where('status', 'completed')->exists();
+    }
+
+    public function previousLesson(): ?Lesson
+    {
+        return self::where('course_id', $this->course_id)
+            ->where('position', '<', $this->position)
+            ->orderBy('position', 'desc')
+            ->first();
+    }
+
+    public function nextLesson(): ?Lesson
+    {
+        return self::where('course_id', $this->course_id)
+            ->where('position', '>', $this->position)
+            ->orderBy('position', 'asc')
+            ->first();
     }
 }

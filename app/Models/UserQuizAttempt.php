@@ -6,33 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserLessonProgress extends Model
+class UserQuizAttempt extends Model
 {
     use HasFactory;
-    
-    protected $table = 'user_lesson_progress';
 
     protected $fillable = [
         'user_id',
-        'lesson_id',
-        'status',
-        'completed_at',
+        'lesson_quiz_id',
+        'score',
+        'passed',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'completed_at' => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'passed' => 'boolean',
+    ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function lesson(): BelongsTo
+    public function lessonQuiz(): BelongsTo
     {
-        return $this->belongsTo(Lesson::class);
+        return $this->belongsTo(LessonQuiz::class);
     }
 }
