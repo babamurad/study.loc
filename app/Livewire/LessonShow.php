@@ -14,6 +14,7 @@ use App\Services\LessonAccessService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -143,7 +144,8 @@ class LessonShow extends Component
         }
     }
 
-    public function getNextLessonProperty(): ?Lesson
+    #[Computed]
+    public function nextLesson(): ?Lesson
     {
         return Lesson::query()
             ->where('course_id', $this->course->id)
@@ -152,18 +154,16 @@ class LessonShow extends Component
             ->first();
     }
 
-    public function getProgressPercentProperty(LessonAccessService $accessService): int
+    #[Computed]
+    public function progressPercent(): int
     {
         /** @var User $user */
         $user = Auth::user();
-        return $accessService->getProgressPercent($user, $this->course->id);
+        return app(LessonAccessService::class)->getProgressPercent($user, $this->course->id);
     }
 
     public function render(): View
     {
-        return view('livewire.lesson-show', [
-            'progressPercent' => $this->progressPercent,
-            'nextLesson' => $this->nextLesson,
-        ]);
+        return view('livewire.lesson-show');
     }
 }

@@ -4,14 +4,36 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Models\Course;
+use App\Models\Lesson;
+use App\Services\LessonAccessService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout('layouts.front')]
 class Home extends Component
 {
-    public function render()
+    public function render(LessonAccessService $lessonAccessService): View
     {
-        return view('livewire.home');
+        /** @var Course|null $course */
+        $course = Course::query()->with('lessons')->first();
+        
+        $currentLesson = null;
+        
+        if ($course) {
+            $user = Auth::user();
+            if ($user) {
+                $currentLesson = $lessonAccessService->getFirstAvailableLesson($user, $course);
+            } else {
+                $currentLesson = $course->lessons()->orderBy('position')->first();
+            }
+        }
+        
+        return view('livewire.home', [
+            'course' => $course,
+            'currentLesson' => $currentLesson,
+        ]);
     }
 }

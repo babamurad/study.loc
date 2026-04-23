@@ -5,24 +5,14 @@ use App\Models\Lesson;
 use App\Models\User;
 use App\Models\UserLessonProgress;
 use App\Services\LessonAccessService;
+use App\Livewire\CourseShow;
+use App\Livewire\LessonShow;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/courses/{course}', function (Course $course) {
-        $course->load(['modules.lessons' => fn ($q) => $q->orderBy('position')]);
-        return view('livewire.course-show', ['course' => $course]);
-    })->name('courses.show');
+    Route::get('/courses/{course}', CourseShow::class)->name('courses.show');
 
-    Route::get('/courses/{course}/lessons/{lesson}', function (Course $course, Lesson $lesson) {
-        $accessService = app(LessonAccessService::class);
-
-        abort_unless($accessService->canAccess(auth()->user(), $lesson), 403);
-
-        return view('livewire.lesson-show', [
-            'course' => $course,
-            'lesson' => $lesson,
-        ]);
-    })->name('lessons.show');
+    Route::get('/courses/{course}/lessons/{lesson}', LessonShow::class)->name('lessons.show');
 
     Route::post('/lessons/{lesson}/complete', function (Lesson $lesson) {
         $accessService = app(LessonAccessService::class);

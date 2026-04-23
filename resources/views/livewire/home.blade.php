@@ -22,11 +22,12 @@
         </section>
 
         <div class="grid">
-            <a href="#" class="card">
+            @if($currentLesson)
+            <a href="{{ route('lessons.show', ['course' => $course, 'lesson' => $currentLesson]) }}" class="card">
                 <div class="card-icon">📖</div>
-                <div class="roadmap-week">Неделя 1</div>
-                <h3>Текущий урок</h3>
-                <p>Фундамент и Текст: Узнай как работает браузер и создай структуру своего первого сайта.</p>
+                <div class="roadmap-week">Неделя {{ $currentLesson->module->position }}</div>
+                <h3>Текущий урок: {{ $currentLesson->title }}</h3>
+                <p>{{ Str::limit($currentLesson->content, 100) }}</p>
                 <div class="card-footer">
                     Перейти к уроку
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,6 +35,7 @@
                     </svg>
                 </div>
             </a>
+            @endif
 
             <a href="#" class="card">
                 <div class="card-icon">🚀</div>

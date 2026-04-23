@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\User;
 use App\Models\UserLessonProgress;
@@ -61,6 +62,19 @@ final readonly class LessonAccessService
         }
 
         return 'locked';
+    }
+
+    public function getFirstAvailableLesson(User $user, Course $course): ?Lesson
+    {
+        $lessons = $course->lessons;
+
+        foreach ($lessons as $lesson) {
+            if ($this->getStatus($user, $lesson) === 'available') {
+                return $lesson;
+            }
+        }
+
+        return $lessons->first();
     }
 
     public function getProgressPercent(User $user, int $courseId): int
