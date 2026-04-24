@@ -30,7 +30,12 @@ class Create extends Component
         'is_published' => 'boolean',
     ];
 
-    public function updatedTitle($value)
+    public function updatedCourseId(): void
+    {
+        $this->module_id = null;
+    }
+
+    public function updatedTitle($value): void
     {
         $this->slug = Str::slug($value);
     }

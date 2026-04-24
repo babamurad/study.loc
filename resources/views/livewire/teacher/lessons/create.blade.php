@@ -8,17 +8,27 @@
     <flux:card>
         <form wire:submit="save" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <flux:select wire:model.live="course_id" label="Курс" placeholder="Выберите курс">
-                    @foreach ($courses as $course)
-                        <flux:select.option value="{{ $course->id }}">{{ $course->title }}</flux:select.option>
-                    @endforeach
-                </flux:select>
+                <flux:field>
+                    <flux:label>Курс</flux:label>
+                    <flux:select wire:model.live="course_id">
+                        <flux:select.option value="">Выберите курс</flux:select.option>
+                        @foreach ($courses as $course)
+                            <flux:select.option value="{{ $course->id }}">{{ $course->title }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="course_id" />
+                </flux:field>
 
-                <flux:select wire:model="module_id" label="Модуль" placeholder="Выберите модуль" :disabled="!$course_id">
-                    @foreach ($modules as $module)
-                        <flux:select.option value="{{ $module->id }}">{{ $module->title }}</flux:select.option>
-                    @endforeach
-                </flux:select>
+                <flux:field>
+                    <flux:label>Модуль</flux:label>
+                    <flux:select wire:key="module-select-{{ $course_id ?? 'none' }}" wire:model.live="module_id" :disabled="!$course_id">
+                        <flux:select.option value="">Выберите модуль</flux:select.option>
+                        @foreach ($modules as $module)
+                            <flux:select.option value="{{ $module->id }}">{{ $module->title }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:error name="module_id" />
+                </flux:field>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

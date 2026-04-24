@@ -14,6 +14,10 @@ final readonly class LessonAccessService
 {
     public function canAccess(?User $user, Lesson $lesson): bool
     {
+        if ($user?->isTeacher()) {
+            return true;
+        }
+
         if (!$user) {
             return false;
         }
@@ -57,7 +61,7 @@ final readonly class LessonAccessService
             return 'completed';
         }
 
-        if ($this->canAccess($user, $lesson)) {
+        if ($user->isTeacher() || $this->canAccess($user, $lesson)) {
             return 'available';
         }
 

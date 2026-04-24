@@ -57,53 +57,37 @@
         </section>
 
         <div class="roadmap">
-            <div class="roadmap-item active">
-                <div class="roadmap-content">
-                    <span class="roadmap-week">Неделя 1</span>
-                    <h4 class="roadmap-title">Фундамент и Текст</h4>
-                    <p class="roadmap-desc">Инфраструктура, VS Code, иерархия заголовков, списки и скелет документа.</p>
-                </div>
-            </div>
+            @foreach($course->modules as $module)
+                @php
+                    $firstLesson = $module->lessons->first();
+                    $status = $user ? $lessonAccessService->getStatus($user, $firstLesson) : ($module->position === 1 ? 'available' : 'locked');
+                    $isActive = $currentLesson && $currentLesson->module_id === $module->id;
+                    $isLocked = $status === 'locked';
+                    $isCompleted = $status === 'completed';
+                    $lessonCount = $module->lessons->count();
+                @endphp
 
-            <div class="roadmap-item">
-                <div class="roadmap-content">
-                    <span class="roadmap-week">Неделя 2</span>
-                    <h4 class="roadmap-title">Связи и Структура</h4>
-                    <p class="roadmap-desc">Ссылки, атрибуты, файловая система (пути) и навигация сайта.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-content">
-                    <span class="roadmap-week">Неделя 3</span>
-                    <h4 class="roadmap-title">Контент и Таблицы</h4>
-                    <p class="roadmap-desc">Мультимедиа (img, video), SEO-атрибуты и верстка табличных данных.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-content">
-                    <span class="roadmap-week">Неделя 4</span>
-                    <h4 class="roadmap-title">Формы и Интерактивы</h4>
-                    <p class="roadmap-desc">Input, Select, Label. Создание функциональных форм обратной связи.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-content">
-                    <span class="roadmap-week">Неделя 5</span>
-                    <h4 class="roadmap-title">Семантика HTML5</h4>
-                    <p class="roadmap-desc">Правильная структура документа: main, section, article. Подготовка к CSS.</p>
-                </div>
-            </div>
-
-            <div class="roadmap-item">
-                <div class="roadmap-content">
-                    <span class="roadmap-week">Недели 6–10</span>
-                    <h4 class="roadmap-title">Погружение в CSS</h4>
-                    <p class="roadmap-desc">Стилизация, Box Model, Позиционирование, Flexbox и Адаптивность.</p>
-                </div>
-            </div>
+                <a href="{{ $isLocked ? '#' : route('lessons.show', ['course' => $course->id, 'lesson' => $firstLesson->id]) }}" 
+                   class="roadmap-item {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}"
+                   @if($isLocked) onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" @endif
+                >
+                    <div class="roadmap-content">
+                        <span class="roadmap-week">Неделя {{ $module->position }}</span>
+                        <h4 class="roadmap-title">{{ $module->title }}</h4>
+                        <p class="roadmap-desc">
+                            {{ $lessonCount }} {{ $lessonCount % 10 == 1 && $lessonCount % 100 != 11 ? 'урок' : ($lessonCount % 10 >= 2 && $lessonCount % 10 <= 4 && ($lessonCount % 100 < 10 || $lessonCount % 100 >= 20) ? 'урока' : 'уроков') }}
+                            &bull; 
+                            @if($isLocked)
+                                <span style="color: var(--text-muted);">Заблокировано</span>
+                            @elseif($isCompleted)
+                                <span style="color: #22c55e;">Пройдено</span>
+                            @else
+                                <span style="color: var(--primary-light);">Доступно</span>
+                            @endif
+                        </p>
+                    </div>
+                </a>
+            @endforeach
         </div>
     </main>
 
