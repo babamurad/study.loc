@@ -304,6 +304,23 @@
             border-color: var(--secondary);
         }
 
+        .roadmap-item.locked .roadmap-content {
+            opacity: 0.5;
+        }
+
+        .roadmap-item.locked:hover .roadmap-content {
+            transform: none;
+            background: var(--glass-bg);
+        }
+
+        .roadmap-item.locked .roadmap-desc {
+            display: none;
+        }
+
+        .roadmap-item.locked::before {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
         /* --- Footer --- */
         footer {
             border-top: 1px solid var(--border);
@@ -417,7 +434,7 @@
                     </div>
                 </div>
 
-                <div class="roadmap-item">
+                <div class="roadmap-item locked">
                     <div class="roadmap-content">
                         <span class="roadmap-week">Неделя 2</span>
                         <h4 class="roadmap-title">Связи и Структура</h4>
@@ -425,7 +442,7 @@
                     </div>
                 </div>
 
-                <div class="roadmap-item">
+                <div class="roadmap-item locked">
                     <div class="roadmap-content">
                         <span class="roadmap-week">Неделя 3</span>
                         <h4 class="roadmap-title">Контент и Таблицы</h4>
@@ -433,7 +450,7 @@
                     </div>
                 </div>
 
-                <div class="roadmap-item">
+                <div class="roadmap-item locked">
                     <div class="roadmap-content">
                         <span class="roadmap-week">Неделя 4</span>
                         <h4 class="roadmap-title">Формы и Интерактивы</h4>
@@ -441,7 +458,7 @@
                     </div>
                 </div>
 
-                <div class="roadmap-item">
+                <div class="roadmap-item locked">
                     <div class="roadmap-content">
                         <span class="roadmap-week">Неделя 5</span>
                         <h4 class="roadmap-title">Семантика HTML5</h4>
@@ -450,7 +467,7 @@
                     </div>
                 </div>
 
-                <div class="roadmap-item">
+                <div class="roadmap-item locked">
                     <div class="roadmap-content">
                         <span class="roadmap-week">Недели 6–10</span>
                         <h4 class="roadmap-title">Погружение в CSS</h4>

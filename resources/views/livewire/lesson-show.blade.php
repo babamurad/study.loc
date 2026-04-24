@@ -130,9 +130,11 @@
                             @endif
                         </div>
 
-                        <div>
-                            {!! $m_content !!}
-                        </div>
+                        @if($isActive)
+                            <div>
+                                {!! $m_content !!}
+                            </div>
+                        @endif
 
                         {{-- Only show Quiz and Complete button for the ACTIVE lesson --}}
                         @if($isActive)
@@ -231,9 +233,13 @@
                             </div>
                         @else
                             <div style="margin-top: 20px; text-align: center;">
-                                <a href="{{ route('lessons.show', ['course' => $course->id, 'lesson' => $m_lesson->id]) }}" 
+                                <a href="{{ route('lessons.show', ['course' => $this->course->id ?? $lesson->module->course_id, 'lesson' => $m_lesson->id]) }}" 
                                    style="text-decoration: none; color: var(--primary-lesson); font-weight: 600; font-size: 0.9rem;">
-                                    Открыть этот урок для прохождения →
+                                    @if($isCompleted)
+                                        Открыть этот урок для повторения →
+                                    @else
+                                        Открыть этот урок для прохождения →
+                                    @endif
                                 </a>
                             </div>
                         @endif

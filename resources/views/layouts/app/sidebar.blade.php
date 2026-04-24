@@ -16,6 +16,20 @@
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                @if(auth()->user()->isTeacher())
+                    <flux:sidebar.group heading="Преподавание" class="grid">
+                        <flux:sidebar.item icon="academic-cap" :href="route('teacher.courses.index')" :current="request()->routeIs('teacher.courses.*')" wire:navigate>
+                            Курсы
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="square-3-stack-3d" :href="route('teacher.modules.index')" :current="request()->routeIs('teacher.modules.*')" wire:navigate>
+                            Модули
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="book-open" :href="route('teacher.lessons.index')" :current="request()->routeIs('teacher.lessons.*')" wire:navigate>
+                            Уроки
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+                @endif
             </flux:sidebar.nav>
 
             <flux:spacer />

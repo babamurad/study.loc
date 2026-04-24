@@ -2,9 +2,8 @@
 
 namespace App\Http\Responses;
 
-use Illuminate\Support\Facades\Auth;
-use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use App\Enums\UserRole;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
 class LoginResponse implements LoginResponseContract
 {
@@ -16,16 +15,12 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request)
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($user->role === UserRole::Teacher) {
-            $home = route('dashboard');
-        } else {
-            $home = route('home');
+            return redirect()->route('teacher.dashboard');
         }
 
-        return $request->wantsJson()
-                    ? response()->json(['two_factor' => false])
-                    : redirect()->intended($home);
+        return redirect()->route('courses.index');
     }
 }

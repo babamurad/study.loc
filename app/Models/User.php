@@ -47,4 +47,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Lesson::class, 'user_lesson_progress')
             ->withPivot(['status', 'completed_at']);
     }
+
+    public function isTeacher(): bool
+    {
+        return $this->role === \App\Enums\UserRole::Teacher;
+    }
 }

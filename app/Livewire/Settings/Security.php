@@ -15,10 +15,12 @@ use Laravel\Fortify\Fortify;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Title('Security settings')]
+#[Layout('layouts.app')]
 class Security extends Component
 {
     use PasswordValidationRules;
