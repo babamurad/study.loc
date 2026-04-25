@@ -12,6 +12,15 @@ class Index extends Component
 {
     use WithPagination;
 
+    public int $perPage = 10;
+
+    protected function queryString(): array
+    {
+        return [
+            'perPage' => ['except' => 10, 'as' => 'per_page'],
+        ];
+    }
+
     public function deleteLesson(Lesson $lesson)
     {
         $lesson->delete();
@@ -21,7 +30,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.teacher.lessons.index', [
-            'lessons' => Lesson::with(['course', 'module'])->orderBy('created_at', 'desc')->paginate(10),
+            'lessons' => Lesson::with(['course', 'module'])->orderBy('created_at', 'desc')->paginate($this->perPage),
         ]);
     }
 }

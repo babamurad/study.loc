@@ -69,7 +69,20 @@
         </div>
     </div>
 
-    <div class="mt-6">
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+            <flux:text variant="subtle">Показывать по:</flux:text>
+            <flux:select wire:model.live="perPage" class="w-20">
+                <flux:select.option value="5">5</flux:select.option>
+                <flux:select.option value="10">10</flux:select.option>
+                <flux:select.option value="25">25</flux:select.option>
+                <flux:select.option value="50">50</flux:select.option>
+            </flux:select>
+        </div>
+        <flux:text variant="subtle">Всего: {{ $lessons->total() }} уроков</flux:text>
+    </div>
+
+    <div>
         {{ $lessons->links() }}
     </div>
 </div>
