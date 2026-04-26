@@ -13,6 +13,30 @@
         </flux:callout>
     @endif
 
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+        <flux:input wire:model.live="search" placeholder="Поиск..." class="w-48" />
+
+        <flux:select wire:model.live="course_id" placeholder="Все курсы" class="w-40">
+            <flux:select.option value="">Все курсы</flux:select.option>
+            @foreach ($courses as $course)
+                <flux:select.option value="{{ $course->id }}">{{ $course->title }}</flux:select.option>
+            @endforeach
+        </flux:select>
+
+        <flux:select wire:model.live="module_id" :disabled="!$course_id" placeholder="Все модули" class="w-40">
+            <flux:select.option value="">Все модули</flux:select.option>
+            @foreach ($modules as $module)
+                <flux:select.option value="{{ $module->id }}">{{ $module->title }}</flux:select.option>
+            @endforeach
+        </flux:select>
+
+        @if ($course_id || $module_id || $search)
+            <flux:button wire:click="$set('course_id', null); $set('module_id', null); $set('search', '')" variant="ghost" size="sm">
+                Сбросить
+            </flux:button>
+        @endif
+    </div>
+
     <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -30,7 +54,9 @@
                     @forelse ($lessons as $lesson)
                         <tr class="group hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <flux:text font="medium" class="text-zinc-900 dark:text-white">{{ $lesson->title }}</flux:text>
+                                <a href="{{ route('teacher.lessons.edit', [$lesson, 'page' => $lessons->currentPage()]) }}" class="text-zinc-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                                    {{ $lesson->title }}
+                                </a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                                 <flux:text variant="subtle">{{ $lesson->course?->title ?? '-' }}</flux:text>
