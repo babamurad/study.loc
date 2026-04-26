@@ -200,6 +200,15 @@
                                     </div>
                                 @endif
 
+                                {{-- Practice Section --}}
+                                @if ($practice && $practice->is_active)
+                                    <div style="margin-top: 40px;">
+                                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 24px;">💻 Практическое задание</h3>
+                                        
+                                        @livewire(App\Livewire\PracticeEditor::class, ['practice' => $practice])
+                                    </div>
+                                @endif
+
                                 @if($justCompleted)
                                     <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 16px; padding: 24px; margin-top: 24px; text-align: center;">
                                         <h3 style="color: #22c55e; font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">✅ Урок завершён!</h3>
@@ -220,7 +229,44 @@
                                         @php
                                             $latestAttempt = $quiz ? App\Models\UserQuizAttempt::where('user_id', auth()->id())->where('lesson_quiz_id', $quiz->id)->latest()->first() : null;
                                             $quizPassed = $latestAttempt && $latestAttempt->passed;
+                                            
+                                            $practicePassed = null;
+                                            $practiceBestScore = null;
+                                            if ($practice && $practice->is_active) {
+                                                $practicePassed = $practice->isPassedBy(auth()->user());
+                                                $bestPractice = $practice->submissions()->where('user_id', auth()->id())->where('passed', true)->orderByDesc('score')->first();
+                                                $practiceBestScore = $bestPractice?->score;
+                                            }
                                         @endphp
+
+                                        @if($practice && $practice->is_active)
+                                            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                                    <h3 style="font-size: 1.25rem; font-weight: bold; margin: 0;">💻 Практическое задание</h3>
+                                                    @if($practicePassed)
+                                                        <span style="background: rgba(34, 197, 94, 0.2); color: #22c55e; padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; font-weight: 600;">
+                                                            ✓ Выполнено ({{ $practiceBestScore }}/10)
+                                                        </span>
+                                                    @else
+                                                        <span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; font-weight: 600;">
+                                                            Не выполнено
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                
+                                                @if($practice->description)
+                                                    <p style="color: var(--text-muted-lesson); margin-bottom: 16px; font-size: 0.95rem;">{{ $practice->description }}</p>
+                                                @endif
+                                                
+                                                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                                                    <a href="{{ route('lessons.show', ['course' => $course, 'lesson' => $lesson]) }}#practice"
+                                                       style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; background: linear-gradient(135deg, var(--primary-lesson), #7c3aed); color: white;">
+                                                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                                        {{ $practicePassed ? 'Повторить практику' : 'Выполнить практику' }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endif
 
                                         @if(!$quiz || $quizPassed)
                                             <button type="button" wire:click="complete" wire:loading.attr="disabled" class="finish-lesson-btn">

@@ -6,7 +6,9 @@ namespace App\Livewire;
 
 use App\Models\Course;
 use App\Models\Lesson;
+use App\Models\LessonPractice;
 use App\Models\LessonQuiz;
+use App\Models\PracticeSubmission;
 use App\Models\QuizQuestion;
 use App\Models\User;
 use App\Models\UserQuizAttempt;
@@ -33,10 +35,14 @@ class LessonShow extends Component
     public ?array $quizResult = null;
     public bool $quizInProgress = false;
 
+    // Practice Properties
+    public ?LessonPractice $practice = null;
+    public bool $practiceExpanded = false;
+
     public function mount(Course $course, Lesson $lesson, LessonAccessService $accessService): void
     {
         $this->course = $course;
-        $this->lesson = $lesson->load('module.course', 'quiz.questions.answers'); 
+        $this->lesson = $lesson->load('module.course', 'quiz.questions.answers', 'practice.testCases'); 
 
         /** @var User|null $user */
         $user = Auth::user();
@@ -46,6 +52,16 @@ class LessonShow extends Component
         }
 
         $this->quiz = $this->lesson->quiz;
+        $this->practice = $this->lesson->practice;
+
+        if ($this->practice) {
+            $this->practice = $this->practice->load(['testCases' => fn($q) => $q->orderBy('sort_order')]);
+        }
+    }
+
+    public function togglePractice(): void
+    {
+        $this->practiceExpanded = !$this->practiceExpanded;
     }
 
     public function startQuiz(): void
@@ -136,6 +152,11 @@ class LessonShow extends Component
             }
         }
 
+        if ($this->practice && !$this->practice->isPassedBy($user)) {
+            session()->flash('error', 'Вы должны сначала выполнить практическое задание.');
+            return;
+        }
+
         if ($accessService->completeLesson($user, $this->lesson)) {
             $this->justCompleted = true;
             $this->dispatch('lesson-completed');
@@ -160,6 +181,31 @@ class LessonShow extends Component
         /** @var User $user */
         $user = Auth::user();
         return app(LessonAccessService::class)->getProgressPercent($user, $this->course->id);
+    }
+
+    #[Computed]
+    public function canCompleteLesson(): bool
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if ($this->quiz) {
+            $quizPassed = UserQuizAttempt::where('user_id', $user->id)
+                ->where('lesson_quiz_id', $this->quiz->id)
+                ->where('passed', true)
+                ->exists();
+            if (!$quizPassed) {
+                return false;
+            }
+        }
+
+        if ($this->practice && $this->practice->is_active) {
+            if (!$this->practice->isPassedBy($user)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function render(): View

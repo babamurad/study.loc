@@ -51,6 +51,16 @@ class Lesson extends Model
         return $this->hasOne(LessonQuiz::class);
     }
 
+    public function practice(): HasOne
+    {
+        return $this->hasOne(LessonPractice::class);
+    }
+
+    public function practices(): HasMany
+    {
+        return $this->hasMany(LessonPractice::class);
+    }
+
     public function isCompletedBy(User $user): bool
     {
         return $this->progress()->where('user_id', $user->id)->where('status', 'completed')->exists();

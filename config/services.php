@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'runner' => [
+        'url' => env('RUNNER_URL', 'http://localhost:8080'),
+        'api_key' => env('RUNNER_API_KEY', 'test-key'),
+        'timeout' => env('RUNNER_TIMEOUT', 5000),
+        'total_timeout' => env('RUNNER_TOTAL_TIMEOUT', 10000),
+        'hmac_secret' => env('RUNNER_HMAC_SECRET', 'change-me-in-production'),
+    ],
+
 ];
