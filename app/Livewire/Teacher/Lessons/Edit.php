@@ -11,48 +11,60 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Rule;
 
 #[Layout('layouts.app')]
 class Edit extends Component
 {
     public Lesson $lesson;
-    public $course_id;
-    public $module_id;
-    public $title;
-    public $slug;
-    public $content;
-    public $position;
-    public $is_published;
+
+    #[Rule('required|exists:courses,id')]
+    public ?int $course_id = null;
+
+    #[Rule('required|exists:modules,id')]
+    public ?int $module_id = null;
+
+    #[Rule('required|string|max:255')]
+    public string $title = '';
+
+    #[Rule('required|string|max:255')]
+    public string $slug = '';
+
+    #[Rule('required|string')]
+    public string $content = '';
+
+    #[Rule('required|integer|min:0')]
+    public int $position = 0;
+
+    #[Rule('boolean')]
+    public bool $is_published = false;
 
     // Practice properties
     public ?LessonPractice $practice = null;
+
+    #[Rule('boolean')]
     public bool $practiceEnabled = false;
+
+    #[Rule('required_if:practiceEnabled,true|string|max:255')]
     public string $practiceTitle = '';
+
     public string $practiceDescription = '';
+
+    #[Rule('required_if:practiceEnabled,true|numeric|min:1')]
     public float $practiceMaxScore = 10.0;
+
+    #[Rule('required_if:practiceEnabled,true|numeric|min:0|lte:practiceMaxScore')]
     public float $practicePassScore = 7.0;
+
     public bool $practiceIsActive = true;
     public array $practiceTestCases = [];
 
     #[Url]
-    public $page = 1;
+    public int $page = 1;
 
     public string $activeTab = 'content';
 
-    protected $rules = [
-        'course_id' => 'required|exists:courses,id',
-        'module_id' => 'required|exists:modules,id',
-        'title' => 'required|string|max:255',
-        'slug' => 'required|string|max:255',
-        'content' => 'required|string',
-        'position' => 'required|integer|min:0',
-        'is_published' => 'boolean',
-        'practiceEnabled' => 'boolean',
-        'practiceTitle' => 'required_if:practiceEnabled,true|string|max:255',
-        'practicePassScore' => 'required_if:practiceEnabled,true|numeric|min:0|max:practiceMaxScore',
-    ];
-
-    public function mount(Lesson $lesson)
+    public function mount(Lesson $lesson): void
     {
         $this->lesson = $lesson;
         $this->course_id = $lesson->course_id;
@@ -60,8 +72,8 @@ class Edit extends Component
         $this->title = $lesson->title;
         $this->slug = $lesson->slug;
         $this->content = $lesson->content;
-        $this->position = $lesson->position;
-        $this->is_published = $lesson->is_published;
+        $this->position = (int) $lesson->position;
+        $this->is_published = (bool) $lesson->is_published;
 
         $this->loadPractice();
     }
@@ -71,12 +83,12 @@ class Edit extends Component
         $this->practice = $this->lesson->practice;
 
         if ($this->practice) {
-            $this->practiceEnabled = $this->practice->is_active;
+            $this->practiceEnabled = (bool) $this->practice->is_active;
             $this->practiceTitle = $this->practice->title;
             $this->practiceDescription = $this->practice->description ?? '';
             $this->practiceMaxScore = (float) $this->practice->max_score;
             $this->practicePassScore = (float) $this->practice->pass_score;
-            $this->practiceIsActive = $this->practice->is_active;
+            $this->practiceIsActive = (bool) $this->practice->is_active;
 
             $this->practiceTestCases = $this->practice->testCases->map(fn($tc) => [
                 'id' => Str::uuid()->toString(),
@@ -86,7 +98,7 @@ class Edit extends Component
                 'weight' => (float) $tc->weight,
                 'script' => json_encode($tc->script, JSON_UNESCAPED_UNICODE),
                 'timeout_ms' => $tc->timeout_ms,
-                'is_required' => $tc->is_required,
+                'is_required' => (bool) $tc->is_required,
                 'sort_order' => $tc->sort_order,
             ])->toArray();
         }
@@ -114,7 +126,7 @@ class Edit extends Component
         );
     }
 
-    public function updatedTitle($value)
+    public function updatedTitle(string $value): void
     {
         $this->slug = Str::slug($value);
     }
@@ -197,3 +209,4 @@ class Edit extends Component
         ]);
     }
 }
+

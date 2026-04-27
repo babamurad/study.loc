@@ -8,34 +8,38 @@ use App\Models\Module;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Rule;
 
 #[Layout('layouts.app')]
 class Create extends Component
 {
-    public $course_id;
-    public $module_id;
-    public $title;
-    public $slug;
-    public $content;
-    public $position = 0;
-    public $is_published = true;
+    #[Rule('required|exists:courses,id')]
+    public ?int $course_id = null;
 
-    protected $rules = [
-        'course_id' => 'required|exists:courses,id',
-        'module_id' => 'required|exists:modules,id',
-        'title' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:lessons,slug',
-        'content' => 'required|string',
-        'position' => 'required|integer|min:0',
-        'is_published' => 'boolean',
-    ];
+    #[Rule('required|exists:modules,id')]
+    public ?int $module_id = null;
+
+    #[Rule('required|string|max:255')]
+    public string $title = '';
+
+    #[Rule('required|string|max:255|unique:lessons,slug')]
+    public string $slug = '';
+
+    #[Rule('required|string')]
+    public string $content = '';
+
+    #[Rule('required|integer|min:0')]
+    public int $position = 0;
+
+    #[Rule('boolean')]
+    public bool $is_published = true;
 
     public function updatedCourseId(): void
     {
         $this->module_id = null;
     }
 
-    public function updatedTitle($value): void
+    public function updatedTitle(string $value): void
     {
         $this->slug = Str::slug($value);
     }
@@ -67,3 +71,4 @@ class Create extends Component
         ]);
     }
 }
+
