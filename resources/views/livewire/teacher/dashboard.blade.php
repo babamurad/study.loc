@@ -35,13 +35,13 @@
             </div>
         </flux:card>
 
-        <flux:card class="flex flex-col gap-4 opacity-50">
+        <flux:card class="flex flex-col gap-4">
             <div>
                 <flux:heading size="lg">Статистика</flux:heading>
-                <flux:subheading>Прогресс учеников (Скоро)</flux:subheading>
+                <flux:subheading>Прогресс учеников</flux:subheading>
             </div>
             <div class="mt-auto">
-                <flux:button disabled>В разработке</flux:button>
+                <flux:button href="{{ route('teacher.students.index') }}" variant="primary">Перейти к статистике</flux:button>
             </div>
         </flux:card>
     </div>

@@ -23,6 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Teacher Routes
     Route::middleware(['role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
         Route::get('/dashboard', \App\Livewire\Teacher\Dashboard::class)->name('dashboard');
+        Route::get('/students', \App\Livewire\Teacher\Students\Index::class)->name('students.index');
         
         // Courses
         Route::get('/courses', \App\Livewire\Teacher\Courses\Index::class)->name('courses.index');
