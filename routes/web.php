@@ -15,7 +15,12 @@ Route::get('/debug-session', function () {
     ];
 });
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', function () {
+        if (auth()->user()->isTeacher()) {
+            return redirect()->route('teacher.dashboard');
+        }
+        return view('dashboard');
+    })->name('dashboard');
 
     // Student Routes
     Route::get('/courses', \App\Livewire\CourseIndex::class)->name('courses.index');

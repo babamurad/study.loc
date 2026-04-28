@@ -4,7 +4,49 @@
         <flux:subheading>Добро пожаловать! Здесь вы можете управлять своими уроками и курсами.</flux:subheading>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <flux:card class="flex items-center gap-4 p-4">
+            <div class="p-3 rounded-lg bg-primary/10 text-primary">
+                <flux:icon name="users" class="size-6" />
+            </div>
+            <div>
+                <flux:heading size="sm" class="text-neutral-500 dark:text-neutral-400">Студентов</flux:heading>
+                <div class="text-2xl font-bold mt-1">{{ $totalStudents }}</div>
+            </div>
+        </flux:card>
+
+        <flux:card class="flex items-center gap-4 p-4">
+            <div class="p-3 rounded-lg bg-primary/10 text-primary">
+                <flux:icon name="academic-cap" class="size-6" />
+            </div>
+            <div>
+                <flux:heading size="sm" class="text-neutral-500 dark:text-neutral-400">Курсов</flux:heading>
+                <div class="text-2xl font-bold mt-1">{{ $totalCourses }}</div>
+            </div>
+        </flux:card>
+
+        <flux:card class="flex items-center gap-4 p-4">
+            <div class="p-3 rounded-lg bg-primary/10 text-primary">
+                <flux:icon name="book-open" class="size-6" />
+            </div>
+            <div>
+                <flux:heading size="sm" class="text-neutral-500 dark:text-neutral-400">Уроков</flux:heading>
+                <div class="text-2xl font-bold mt-1">{{ $totalLessons }}</div>
+            </div>
+        </flux:card>
+
+        <flux:card class="flex items-center gap-4 p-4">
+            <div class="p-3 rounded-lg bg-primary/10 text-primary">
+                <flux:icon name="check-circle" class="size-6" />
+            </div>
+            <div>
+                <flux:heading size="sm" class="text-neutral-500 dark:text-neutral-400">Успешность</flux:heading>
+                <div class="text-2xl font-bold mt-1">{{ $successRate }}%</div>
+            </div>
+        </flux:card>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <flux:card class="flex flex-col gap-4">
             <div>
                 <flux:heading size="lg">Уроки</flux:heading>

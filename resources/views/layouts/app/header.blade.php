@@ -10,9 +10,15 @@
             <x-app-logo href="{{ route('home') }}" target="_blank" wire:navigate />
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
-                </flux:navbar.item>
+                @if(auth()->user()->isTeacher())
+                    <flux:navbar.item icon="layout-grid" :href="route('teacher.dashboard')" :current="request()->routeIs('teacher.dashboard')" wire:navigate>
+                        Дашборд
+                    </flux:navbar.item>
+                @else
+                    <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                        {{ __('Dashboard') }}
+                    </flux:navbar.item>
+                @endif
 
                 @if(auth()->user()->isTeacher())
                     <flux:navbar.item icon="shield-check" :href="route('teacher.dashboard')" :current="request()->routeIs('teacher.*')" wire:navigate>
@@ -59,9 +65,15 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')">
-                    <flux:sidebar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard')  }}
-                    </flux:sidebar.item>
+                    @if(auth()->user()->isTeacher())
+                        <flux:sidebar.item icon="layout-grid" :href="route('teacher.dashboard')" :current="request()->routeIs('teacher.dashboard')" wire:navigate>
+                            Дашборд
+                        </flux:sidebar.item>
+                    @else
+                        <flux:sidebar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                            {{ __('Dashboard')  }}
+                        </flux:sidebar.item>
+                    @endif
 
                     @if(auth()->user()->isTeacher())
                         <flux:sidebar.item icon="shield-check" :href="route('teacher.dashboard')" :current="request()->routeIs('teacher.*')" wire:navigate>
