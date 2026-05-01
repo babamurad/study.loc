@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use App\Models\PracticeSubmission;
 use App\Models\PracticeTestCase;
 use App\Models\PracticeTestResult;
@@ -24,12 +24,12 @@ class RunnerClient
 
     public function evaluate(PracticeSubmission $submission): array
     {
-        $practice = $submission->lessonPractice;
+        $practice = $submission->practice;
         $testCases = $practice->testCases;
 
         $payload = [
             'submission_id' => $submission->id,
-            'idempotency_key' => "{$submission->user_id}-{$submission->lesson_practice_id}-{$submission->attempt_no}",
+            'idempotency_key' => "{$submission->user_id}-{$submission->practice_id}-{$submission->attempt_no}",
             'profile' => $practice->runner_profile,
             'code' => [
                 'html' => $submission->html_code,

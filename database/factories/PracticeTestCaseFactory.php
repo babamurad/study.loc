@@ -13,8 +13,8 @@ class PracticeTestCaseFactory extends Factory
     public function definition(): array
     {
         return [
-            'lesson_practice_id' => LessonPractice::factory(),
-            'name' => $this->faker->sentence(3),
+            'practice_id' => \App\Models\Practice::factory(),
+            'name' => $this->faker->words(3, true),
             'type' => $this->faker->randomElement(PracticeTestCase::TYPES),
             'weight' => $this->faker->randomFloat(1, 1, 3),
             'script' => [

@@ -3,18 +3,19 @@
 namespace Database\Factories;
 
 use App\Models\Lesson;
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LessonPracticeFactory extends Factory
+class PracticeFactory extends Factory
 {
-    protected $model = LessonPractice::class;
+    protected $model = Practice::class;
 
     public function definition(): array
     {
         return [
-            'lesson_id' => Lesson::factory(),
-            'title' => $this->faker->sentence(3),
+            'practicable_type' => \App\Models\Lesson::class,
+            'practicable_id' => \App\Models\Lesson::factory(),
+            'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(),
             'runner_profile' => 'frontend_html_css_js_v1',
             'max_score' => 10.0,

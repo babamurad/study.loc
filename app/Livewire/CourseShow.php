@@ -16,7 +16,10 @@ class CourseShow extends Component
 
     public function mount(Course $course)
     {
-        $this->course = $course->load(['modules.lessons' => fn ($q) => $q->orderBy('position')]);
+        $this->course = $course->load([
+            'modules.lessons' => fn ($q) => $q->orderBy('position'),
+            'modules.practices' => fn ($q) => $q->where('is_active', true)
+        ]);
         $this->loadLessonStatuses();
     }
 

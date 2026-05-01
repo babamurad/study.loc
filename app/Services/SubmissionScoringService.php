@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use App\Models\PracticeSubmission;
 use App\Models\PracticeTestResult;
 
@@ -10,7 +10,7 @@ class SubmissionScoringService
 {
     public function calculate(PracticeSubmission $submission): array
     {
-        $practice = $submission->lessonPractice;
+        $practice = $submission->practice;
         $results = $submission->testResults;
         $testCases = $practice->testCases;
 

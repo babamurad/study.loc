@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\LessonPractice;
-use App\Models\LessonPracticeFactory;
+use App\Models\Practice;
 use App\Models\PracticeTestCase;
 use App\Models\PracticeTestCaseFactory;
 use App\Models\PracticeSubmission;
@@ -11,13 +10,13 @@ use App\Models\User;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
-    $this->practice = LessonPractice::factory()->create();
+    $this->practice = Practice::factory()->create();
     $this->testCases = PracticeTestCase::factory()->count(3)->create([
-        'lesson_practice_id' => $this->practice->id,
+        'practice_id' => $this->practice->id,
     ]);
 });
 
-describe('LessonPractice model', function () {
+describe('Practice model', function () {
     test('has test cases', function () {
         expect($this->practice->testCases)->toHaveCount(3);
     });
@@ -31,7 +30,7 @@ describe('PracticeSubmission scoring', function () {
     test('score is 0 when no tests passed', function () {
         $submission = PracticeSubmission::factory()->create([
             'user_id' => $this->user->id,
-            'lesson_practice_id' => $this->practice->id,
+            'practice_id' => $this->practice->id,
             'status' => PracticeSubmission::STATUS_COMPLETED,
         ]);
 
@@ -51,7 +50,7 @@ describe('PracticeSubmission scoring', function () {
     test('submission calculates next attempt number', function () {
         $attempt1 = PracticeSubmission::factory()->create([
             'user_id' => $this->user->id,
-            'lesson_practice_id' => $this->practice->id,
+            'practice_id' => $this->practice->id,
             'attempt_no' => 1,
         ]);
 
@@ -67,20 +66,20 @@ describe('PracticeSubmission scoring', function () {
 describe('Required tests', function () {
     test('submission fails if required test fails', function () {
         $requiredTestCase = PracticeTestCase::factory()->create([
-            'lesson_practice_id' => $this->practice->id,
+            'practice_id' => $this->practice->id,
             'is_required' => true,
             'weight' => 5,
         ]);
 
         $optionalTestCase = PracticeTestCase::factory()->create([
-            'lesson_practice_id' => $this->practice->id,
+            'practice_id' => $this->practice->id,
             'is_required' => false,
             'weight' => 5,
         ]);
 
         $submission = PracticeSubmission::factory()->create([
             'user_id' => $this->user->id,
-            'lesson_practice_id' => $this->practice->id,
+            'practice_id' => $this->practice->id,
         ]);
 
         PracticeTestResult::create([

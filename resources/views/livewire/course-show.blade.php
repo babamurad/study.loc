@@ -84,6 +84,30 @@
                             </div>
                         @endforeach
                     </div>
+
+                    {{-- Module Practice --}}
+                    @foreach($module->practices as $practice)
+                        <div style="margin-top: 12px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(124, 58, 237, 0.1)); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: white; background: linear-gradient(135deg, #6366f1, #7c3aed);">
+                                <i class="fa fa-code"></i>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <h4 style="font-size: 1.125rem; font-weight: 700; color: #a5b4fc;">💻 Итоговая практика: {{ $practice->title }}</h4>
+                                <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 4px;">{{ Str::limit($practice->description, 100) }}</p>
+                            </div>
+                            <div>
+                                @php($practicePassed = $practice->isPassedBy(auth()->user()))
+                                @if($practicePassed)
+                                    <span style="font-size: 0.875rem; font-weight: 600; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 6px 12px; border-radius: 99px;">✓ Выполнено</span>
+                                @else
+                                    <a href="{{ route('lessons.show', ['course' => $course->id, 'lesson' => $module->lessons()->first()->id]) }}#practice-module-{{ $practice->id }}"
+                                       style="text-decoration: none; font-weight: 700; padding: 8px 20px; border-radius: 12px; background: #6366f1; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+                                        Начать проект
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             @endforeach
         </div>

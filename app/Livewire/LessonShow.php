@@ -6,7 +6,7 @@ namespace App\Livewire;
 
 use App\Models\Course;
 use App\Models\Lesson;
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use App\Models\LessonQuiz;
 use App\Models\PracticeSubmission;
 use App\Models\QuizQuestion;
@@ -36,10 +36,11 @@ class LessonShow extends Component
     public bool $quizInProgress = false;
 
     // Practice Properties
-    public ?LessonPractice $practice = null;
+    public ?Practice $practice = null;
+    public ?Practice $modulePractice = null;
     public bool $practiceExpanded = false;
 
-    public function mount(Course $course, Lesson $lesson, LessonAccessService $accessService): void
+    public function mount(Course $course, Lesson $lesson, LessonAccessService $accessService, ?int $module_practice = null): void
     {
         $this->course = $course;
         $this->lesson = $lesson->load('module.course', 'quiz.questions.answers', 'practice.testCases'); 
@@ -56,6 +57,13 @@ class LessonShow extends Component
 
         if ($this->practice) {
             $this->practice = $this->practice->load(['testCases' => fn($q) => $q->orderBy('sort_order')]);
+        }
+
+        if ($module_practice) {
+            $this->modulePractice = Practice::where('id', $module_practice)
+                ->where('is_active', true)
+                ->with(['testCases' => fn($q) => $q->orderBy('sort_order')])
+                ->first();
         }
     }
 

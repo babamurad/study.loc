@@ -12,7 +12,7 @@ class PracticeTestCase extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lesson_practice_id',
+        'practice_id',
         'name',
         'type',
         'weight',
@@ -42,9 +42,9 @@ class PracticeTestCase extends Model
         'snapshot',
     ];
 
-    public function lessonPractice(): BelongsTo
+    public function practice(): BelongsTo
     {
-        return $this->belongsTo(LessonPractice::class, 'lesson_practice_id');
+        return $this->belongsTo(Practice::class, 'practice_id');
     }
 
     public function results(): HasMany

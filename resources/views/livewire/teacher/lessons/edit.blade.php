@@ -79,7 +79,36 @@
                         <flux:input type="number" wire:model="practicePassScore" label="Проходной балл" step="0.1" min="0" />
                     </div>
 
-                    <flux:textarea wire:model="practiceDescription" label="Описание для ученика" placeholder="Опишите задание..." rows="3" />
+                    <flux:textarea wire:model="practiceDescription" label="Короткое описание" placeholder="Опишите задание..." rows="2" />
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <flux:textarea wire:model="practiceObjective" label="Цель задания" placeholder="Какую цель преследует это задание?" rows="4" />
+                            <flux:textarea wire:model="practiceCheckingCriteria" label="Критерии проверки" placeholder="На что обратить внимание при проверке?" rows="4" />
+                        </div>
+                        <div class="space-y-4">
+                            <flux:textarea wire:model="practiceTechnicalTask" label="Техническое задание" placeholder="Подробное ТЗ для ученика..." rows="9" />
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-6">
+                        <flux:heading size="lg" class="mb-4">Изображение результата</flux:heading>
+                        <div class="flex items-start gap-6">
+                            <div class="flex-1">
+                                <flux:input type="file" wire:model="practiceResultImage" label="Загрузить новое изображение" />
+                                <flux:subheading class="mt-2">Это изображение ученик увидит как эталон того, что должно получиться.</flux:subheading>
+                            </div>
+                            @if ($practiceResultImage)
+                                <div class="w-48 h-32 rounded-lg overflow-hidden border bg-gray-50 flex items-center justify-center">
+                                    <img src="{{ $practiceResultImage->temporaryUrl() }}" class="max-w-full max-h-full object-contain">
+                                </div>
+                            @elseif ($existingResultImagePath)
+                                <div class="w-48 h-32 rounded-lg overflow-hidden border bg-gray-50 flex items-center justify-center">
+                                    <img src="{{ asset('storage/' . $existingResultImagePath) }}" class="max-w-full max-h-full object-contain">
+                                </div>
+                            @endif
+                        </div>
+                    </div>
 
                     <div class="border-t pt-6">
 <div class="flex items-center justify-between mb-4">
@@ -140,13 +169,13 @@
                             </div>
                         @endforeach
 
-                        <div class="bg-blue-50 rounded-lg p-4 mt-6">
-                            <h4 class="font-medium text-blue-900 mb-2">Примеры скриптов:</h4>
-                            <div class="text-sm text-blue-800 space-y-1 font-mono">
-                                <p>DOM: {"selector": ".card", "exists": true}</p>
-                                <p>CSS: {"selector": ".card", "property": "width", "expected": "300px"}</p>
-                                <p>Behavior: {"selector": ".btn", "event": "click", "expectedClass": "active"}</p>
-                                <p>Console: {} (проверяет отсутствие ошибок)</p>
+                        <div class="bg-blue-50 dark:bg-zinc-900 rounded-lg p-4 mt-6 border border-blue-100 dark:border-zinc-800">
+                            <h4 class="font-medium text-blue-900 dark:text-white mb-2">Примеры скриптов:</h4>
+                            <div class="text-sm space-y-1 font-mono">
+                                <p class="text-blue-800 dark:text-zinc-300">DOM: {"selector": ".card", "exists": true}</p>
+                                <p class="text-blue-800 dark:text-zinc-300">CSS: {"selector": ".card", "property": "width", "expected": "300px"}</p>
+                                <p class="text-blue-800 dark:text-zinc-300">Behavior: {"selector": ".btn", "event": "click", "expectedClass": "active"}</p>
+                                <p class="text-blue-800 dark:text-zinc-300">Console: {} (проверяет отсутствие ошибок)</p>
                             </div>
                         </div>
                     </div>

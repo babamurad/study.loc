@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Lesson extends Model
 {
@@ -51,14 +53,14 @@ class Lesson extends Model
         return $this->hasOne(LessonQuiz::class);
     }
 
-    public function practice(): HasOne
+    public function practice(): MorphOne
     {
-        return $this->hasOne(LessonPractice::class);
+        return $this->morphOne(Practice::class, 'practicable');
     }
 
-    public function practices(): HasMany
+    public function practices(): MorphMany
     {
-        return $this->hasMany(LessonPractice::class);
+        return $this->morphMany(Practice::class, 'practicable');
     }
 
     public function isCompletedBy(User $user): bool

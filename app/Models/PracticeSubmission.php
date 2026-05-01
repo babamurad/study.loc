@@ -15,7 +15,7 @@ class PracticeSubmission extends Model
 
     protected $fillable = [
         'user_id',
-        'lesson_practice_id',
+        'practice_id',
         'html_code',
         'css_code',
         'js_code',
@@ -61,9 +61,9 @@ class PracticeSubmission extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lessonPractice(): BelongsTo
+    public function practice(): BelongsTo
     {
-        return $this->belongsTo(LessonPractice::class, 'lesson_practice_id');
+        return $this->belongsTo(Practice::class, 'practice_id');
     }
 
     public function testResults(): HasMany
@@ -99,10 +99,10 @@ class PracticeSubmission extends Model
         return $query->whereIn('status', [self::STATUS_PENDING, self::STATUS_RUNNING]);
     }
 
-    public static function getNextAttemptNumber(int $userId, int $lessonPracticeId): int
+    public static function getNextAttemptNumber(int $userId, int $practiceId): int
     {
         return self::where('user_id', $userId)
-                ->where('lesson_practice_id', $lessonPracticeId)
+                ->where('practice_id', $practiceId)
                 ->max('attempt_no') + 1;
     }
 }

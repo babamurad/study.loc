@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин кроссовок | Flexbox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui;
+            background: #f1f5f9;
+        }
+        /* Sticky header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+        .logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #0f172a;
+        }
+        .cart-icon {
+            background: #4f46e5;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+        /* Flex-сетка карточек */
+        .products {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        .card {
+            flex: 0 0 280px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: all 0.25s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -12px rgba(0,0,0,0.2);
+        }
+        .card-img {
+            background: #e2e8f0;
+            height: 180px;
+            background-size: cover;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4f46e5;
+            margin: 12px 0;
+        }
+        button {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #4f46e5;
+            transform: scale(1.02);
+        }
+        /* fixed кнопка */
+        .fixed-cart {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #f59e0b;
+            color: #1e293b;
+            font-weight: bold;
+            padding: 14px 24px;
+            border-radius: 60px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            text-decoration: none;
+            z-index: 20;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">🏃‍♂️ SneakerShop</div>
+    <div class="cart-icon">Корзина (0)</div>
+</div>
+
+<div class="products">
+    <div class="card"><div class="card-img" style="background-image: url('https://picsum.photos/id/10/300/200');"></div><div class="card-content"><h3>Nike Air Max</h3><div class="price">$129</div><button>Купить</button></div></div>
+    <div class="card"><div class="card-img" style="background-image: url('https://picsum.photos/id/20/300/200');"></div><div class="card-content"><h3>Adidas Ultraboost</h3><div class="price">$159</div><button>Купить</button></div></div>
+    <div class="card"><div class="card-img" style="background-image: url('https://picsum.photos/id/23/300/200');"></div><div class="card-content"><h3>New Balance 574</h3><div class="price">$99</div><button>Купить</button></div></div>
+    <div class="card"><div class="card-img" style="background-image: url('https://picsum.photos/id/30/300/200');"></div><div class="card-content"><h3>Puma RS-X</h3><div class="price">$114</div><button>Купить</button></div></div>
+</div>
+
+<footer>© 2025 SneakerShop — доставка по всему миру</footer>
+
+<a href="#" class="fixed-cart">🛒 Оформить заказ</a>
+
+</body>
+</html>

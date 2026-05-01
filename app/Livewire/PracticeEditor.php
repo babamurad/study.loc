@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Jobs\RunPracticeSubmissionJob;
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use App\Models\PracticeSubmission;
 use App\Models\PracticeTestCase;
 use App\Models\PracticeTestResult;
@@ -16,7 +16,7 @@ use Livewire\Component;
 
 class PracticeEditor extends Component
 {
-    public LessonPractice $practice;
+    public Practice $practice;
     public string $htmlCode = '';
     public string $cssCode = '';
     public string $jsCode = '';
@@ -114,7 +114,7 @@ class PracticeEditor extends Component
 
         $submission = PracticeSubmission::create([
             'user_id' => $user->id,
-            'lesson_practice_id' => $this->practice->id,
+            'practice_id' => $this->practice->id,
             'html_code' => $this->htmlCode,
             'css_code' => $this->cssCode,
             'js_code' => $this->jsCode,

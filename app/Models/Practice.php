@@ -4,17 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class LessonPractice extends Model
+class Practice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'lesson_id',
+        'practicable_type',
+        'practicable_id',
         'title',
         'description',
+        'objective',
+        'technical_task',
+        'checking_criteria',
+        'result_image_path',
         'runner_profile',
         'max_score',
         'pass_score',
@@ -32,19 +37,19 @@ class LessonPractice extends Model
         ];
     }
 
-    public function lesson(): BelongsTo
+    public function practicable(): MorphTo
     {
-        return $this->belongsTo(Lesson::class);
+        return $this->morphTo();
     }
 
     public function testCases(): HasMany
     {
-        return $this->hasMany(PracticeTestCase::class, 'lesson_practice_id')->orderBy('sort_order');
+        return $this->hasMany(PracticeTestCase::class, 'practice_id')->orderBy('sort_order');
     }
 
     public function submissions(): HasMany
     {
-        return $this->hasMany(PracticeSubmission::class, 'lesson_practice_id');
+        return $this->hasMany(PracticeSubmission::class, 'practice_id');
     }
 
     public function getMaxWeightAttribute(): float

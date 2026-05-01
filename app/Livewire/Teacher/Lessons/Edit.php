@@ -4,11 +4,12 @@ namespace App\Livewire\Teacher\Lessons;
 
 use App\Models\Course;
 use App\Models\Lesson;
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use App\Models\Module;
 use App\Models\PracticeTestCase;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Rule;
@@ -16,6 +17,8 @@ use Livewire\Attributes\Rule;
 #[Layout('layouts.app')]
 class Edit extends Component
 {
+    use WithFileUploads;
+
     public Lesson $lesson;
 
     #[Rule('required|exists:courses,id')]
@@ -40,7 +43,7 @@ class Edit extends Component
     public bool $is_published = false;
 
     // Practice properties
-    public ?LessonPractice $practice = null;
+    public ?Practice $practice = null;
 
     #[Rule('boolean')]
     public bool $practiceEnabled = false;
@@ -57,6 +60,11 @@ class Edit extends Component
     public float $practicePassScore = 7.0;
 
     public bool $practiceIsActive = true;
+    public string $practiceObjective = '';
+    public string $practiceTechnicalTask = '';
+    public string $practiceCheckingCriteria = '';
+    public $practiceResultImage = null;
+    public ?string $existingResultImagePath = null;
     public array $practiceTestCases = [];
 
     #[Url]
@@ -89,6 +97,10 @@ class Edit extends Component
             $this->practiceMaxScore = (float) $this->practice->max_score;
             $this->practicePassScore = (float) $this->practice->pass_score;
             $this->practiceIsActive = (bool) $this->practice->is_active;
+            $this->practiceObjective = $this->practice->objective ?? '';
+            $this->practiceTechnicalTask = $this->practice->technical_task ?? '';
+            $this->practiceCheckingCriteria = $this->practice->checking_criteria ?? '';
+            $this->existingResultImagePath = $this->practice->result_image_path;
 
             $this->practiceTestCases = $this->practice->testCases->map(fn($tc) => [
                 'id' => Str::uuid()->toString(),
@@ -146,8 +158,8 @@ class Edit extends Component
         ]);
 
         if ($this->practiceEnabled) {
-            $practice = LessonPractice::updateOrCreate(
-                ['lesson_id' => $this->lesson->id],
+            $practice = Practice::updateOrCreate(
+                ['practicable_type' => \App\Models\Lesson::class, 'practicable_id' => $this->lesson->id],
                 [
                     'title' => $this->practiceTitle,
                     'description' => $this->practiceDescription,
@@ -155,15 +167,23 @@ class Edit extends Component
                     'max_score' => $this->practiceMaxScore,
                     'pass_score' => $this->practicePassScore,
                     'is_active' => true,
+                    'objective' => $this->practiceObjective,
+                    'technical_task' => $this->practiceTechnicalTask,
+                    'checking_criteria' => $this->practiceCheckingCriteria,
                 ]
             );
+
+            if ($this->practiceResultImage) {
+                $imagePath = $this->practiceResultImage->store('practices', 'public');
+                $practice->update(['result_image_path' => $imagePath]);
+            }
 
             $existingIds = collect($this->practiceTestCases)
                 ->pluck('existing_id')
                 ->filter()
                 ->toArray();
 
-            PracticeTestCase::where('lesson_practice_id', $practice->id)
+            PracticeTestCase::where('practice_id', $practice->id)
                 ->whereNotIn('id', $existingIds)
                 ->delete();
 
@@ -180,7 +200,7 @@ class Edit extends Component
                 PracticeTestCase::updateOrCreate(
                     ['id' => $tc['existing_id'] ?? null],
                     [
-                        'lesson_practice_id' => $practice->id,
+                        'practice_id' => $practice->id,
                         'name' => $tc['name'],
                         'type' => $tc['type'],
                         'weight' => (float) $tc['weight'],

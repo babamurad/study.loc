@@ -100,6 +100,19 @@
             </div>
         </div>
 
+        @if($modulePractice)
+            <div class="module-practice-container" style="margin-bottom: 64px;">
+                <section style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(124, 58, 237, 0.05)); border: 1px solid var(--primary-light); padding: 40px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);">
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <span style="background: var(--primary-lesson); color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; display: inline-block;">Итоговый проект модуля</span>
+                        <h2 style="font-size: 2rem; justify-content: center;">{{ $modulePractice->title }}</h2>
+                    </div>
+
+                    @livewire(App\Livewire\PracticeEditor::class, ['practice' => $modulePractice])
+                </section>
+            </div>
+        @endif
+
         <main>
             @foreach($lesson->module->lessons()->orderBy('position')->get() as $m_lesson)
                 @php

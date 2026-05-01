@@ -1,0 +1,193 @@
+{
+    "api": {
+        "listen": "[::1]:10085",
+        "services": [
+            "StatsService"
+        ],
+        "tag": "api"
+    },
+    "dns": {
+        "hosts": {
+            "domain:googleapis.cn": "googleapis.com"
+        },
+        "queryStrategy": "UseIP",
+        "servers": [
+            "1.1.1.1",
+            {
+                "address": "1.1.1.1",
+                "domains": [],
+                "port": 53
+            },
+            {
+                "address": "8.8.8.8",
+                "domains": [],
+                "port": 53
+            }
+        ]
+    },
+    "inbounds": [
+        {
+            "listen": "127.0.0.1",
+            "port": 10808,
+            "protocol": "socks",
+            "settings": {
+                "auth": "noauth",
+                "udp": true,
+                "userLevel": 8
+            },
+            "sniffing": {
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "enabled": true
+            },
+            "tag": "socks"
+        },
+        {
+            "listen": "127.0.0.1",
+            "port": 10809,
+            "protocol": "http",
+            "settings": {
+                "auth": "noauth",
+                "userLevel": 8
+            },
+            "sniffing": {
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "enabled": true
+            },
+            "tag": "http"
+        }
+    ],
+    "log": {
+        "loglevel": "warning"
+    },
+    "outbounds": [
+        {
+            "mux": {
+                "concurrency": -1,
+                "enabled": false,
+                "xudpConcurrency": 8,
+                "xudpProxyUDP443": ""
+            },
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "3.161.119.21",
+                        "port": 443,
+                        "users": [
+                            {
+                                "encryption": "none",
+                                "flow": "",
+                                "id": "87ab7f54-b45b-42e8-a056-0213d28c34ca",
+                                "level": 8,
+                                "security": "auto"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "tls",
+                "tlsSettings": {
+                    "allowInsecure": true,
+                    "alpn": [
+                        "h3"
+                    ],
+                    "fingerprint": "chrome",
+                    "serverName": "d2weyzm5tub1ah.cloudfront.net",
+                    "show": false
+                },
+                "xhttpSettings": {
+                    "extra": {
+                        "xmux": {
+                            "enabled": true,
+                            "cMaxReuseTimes": 0,
+                            "maxConnections": 16,
+                            "hMaxRequestTimes": "800-1000",
+                            "hMaxReusableSecs": "1200-1800"
+                        },
+                        "headers": {
+                            "Accept": "*/*",
+                            "Connection": "keep-alive",
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                        },
+                        "noGRPCHeader": true,
+                        "xPaddingBytes": "100-600",
+                        "scMaxEachPostBytes": 1500000,
+                        "scMaxConcurrentPosts": 100,
+                        "scMinPostsIntervalMs": "10-20"
+                    },
+                    "host": "d2weyzm5tub1ah.cloudfront.net",
+                    "mode": "packet-up",
+                    "path": "/",
+                    "scMaxConcurrentPosts": 10,
+                    "scMaxEachPostBytes": 1000000,
+                    "scMinPostsIntervalMs": "30"
+                }
+            },
+            "tag": "proxy"
+        },
+        {
+            "protocol": "freedom",
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "tag": "block"
+        }
+    ],
+    "policy": {
+        "levels": {
+            "8": {
+                "connIdle": 300,
+                "downlinkOnly": 1,
+                "handshake": 4,
+                "uplinkOnly": 1
+            }
+        },
+        "system": {
+            "statsOutboundUplink": true,
+            "statsOutboundDownlink": true
+        }
+    },
+    "remarks": "🇭🇺 Венгрия F¹",
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "ip": [
+                    "1.1.1.1"
+                ],
+                "outboundTag": "proxy",
+                "port": "53"
+            },
+            {
+                "ip": [
+                    "8.8.8.8"
+                ],
+                "outboundTag": "direct",
+                "port": "53"
+            },
+            {
+                "ip": [
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16",
+                    "169.254.0.0/16",
+                    "224.0.0.0/4",
+                    "255.255.255.255"
+                ],
+                "outboundTag": "direct"
+            }
+        ]
+    },
+    "stats": {}
+}

@@ -3,7 +3,7 @@
 namespace App\Livewire\Teacher\Practices;
 
 use App\Models\Lesson;
-use App\Models\LessonPractice;
+use App\Models\Practice;
 use App\Models\PracticeTestCase;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class EditPractice extends Component
 {
-    public ?LessonPractice $practice = null;
+    public ?Practice $practice = null;
     public Lesson $lesson;
     
     public string $title = '';
@@ -34,7 +34,7 @@ class EditPractice extends Component
         'testCases' => 'array',
     ];
     
-    public function mount(Lesson $lesson, ?LessonPractice $practice = null): void
+    public function mount(Lesson $lesson, ?Practice $practice = null): void
     {
         $this->lesson = $lesson;
         $this->practice = $practice;
@@ -85,10 +85,11 @@ class EditPractice extends Component
     {
         $this->validate();
         
-        $practice = LessonPractice::updateOrCreate(
+        $practice = Practice::updateOrCreate(
             ['id' => $this->practice?->id],
             [
-                'lesson_id' => $this->lesson->id,
+                'practicable_type' => \App\Models\Lesson::class,
+                'practicable_id' => $this->lesson->id,
                 'title' => $this->title,
                 'description' => $this->description,
                 'runner_profile' => $this->runnerProfile,
@@ -103,7 +104,7 @@ class EditPractice extends Component
             ->filter()
             ->toArray();
         
-        PracticeTestCase::where('lesson_practice_id', $practice->id)
+        PracticeTestCase::where('practice_id', $practice->id)
             ->whereNotIn('id', $existingIds)
             ->delete();
         
@@ -115,7 +116,7 @@ class EditPractice extends Component
             PracticeTestCase::updateOrCreate(
                 ['id' => $tc['existing_id'] ?? null],
                 [
-                    'lesson_practice_id' => $practice->id,
+                    'practice_id' => $practice->id,
                     'name' => $tc['name'],
                     'type' => $tc['type'],
                     'weight' => $tc['weight'],

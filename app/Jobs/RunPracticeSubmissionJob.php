@@ -28,7 +28,7 @@ class RunPracticeSubmissionJob implements ShouldQueue
 
     public function handle(RunnerClient $runnerClient, SubmissionScoringService $scoringService): void
     {
-        $submission = PracticeSubmission::with(['lessonPractice.testCases', 'testResults'])->find($this->submissionId);
+        $submission = PracticeSubmission::with(['practice.testCases', 'testResults'])->find($this->submissionId);
 
         if (!$submission) {
             Log::warning('Submission not found', ['submission_id' => $this->submissionId]);
@@ -96,18 +96,25 @@ class RunPracticeSubmissionJob implements ShouldQueue
 
     private function updateLessonProgress(PracticeSubmission $submission): void
     {
-        $practice = $submission->lessonPractice;
+        $practice = $submission->practice;
         $user = $submission->user;
-        $lesson = $practice->lesson;
+        
+        if ($practice->practicable_type !== \App\Models\Lesson::class) {
+            return;
+        }
+        
+        $lesson = $practice->practicable;
 
         $progress = $lesson->progress()->where('user_id', $user->id)->first();
 
-        $allPracticesPassed = LessonPractice::where('lesson_id', $lesson->id)
+        $allPracticesPassed = \App\Models\Practice::where('practicable_type', \App\Models\Lesson::class)
+            ->where('practicable_id', $lesson->id)
             ->where('is_active', true)
             ->whereHas('submissions', fn($q) => $q->where('user_id', $user->id)->where('passed', true))
             ->exists();
 
-        $requiredPracticesPassed = !LessonPractice::where('lesson_id', $lesson->id)
+        $requiredPracticesPassed = !\App\Models\Practice::where('practicable_type', \App\Models\Lesson::class)
+            ->where('practicable_id', $lesson->id)
             ->where('is_active', true)
             ->whereDoesntHave('submissions', fn($q) => $q->where('user_id', $user->id)->where('passed', true))
             ->exists();

@@ -14,9 +14,9 @@ class PracticeSubmissionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'lesson_practice_id' => LessonPractice::factory(),
-            'html_code' => '<div class="card">Hello</div>',
+            'user_id' => \App\Models\User::factory(),
+            'practice_id' => \App\Models\Practice::factory(),
+            'html_code' => '<div></div>',
             'css_code' => '.card { width: 300px; }',
             'js_code' => null,
             'status' => PracticeSubmission::STATUS_PENDING,

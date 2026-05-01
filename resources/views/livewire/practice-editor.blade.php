@@ -155,6 +155,47 @@
         @if($practice->description)
             <p style="color: var(--text-muted); margin-bottom: 20px;">{!! $practice->description !!}</p>
         @endif
+
+        <div style="display: grid; grid-cols: 1; md:grid-cols-2 gap: 24px; margin-bottom: 32px;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 16px; padding: 24px;">
+                <h4 style="color: var(--primary); font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Цель задания
+                </h4>
+                <div style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6;">
+                    {!! nl2br(e($practice->objective)) !!}
+                </div>
+                
+                @if($practice->checking_criteria)
+                    <h4 style="color: var(--secondary); font-weight: 700; margin-top: 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Критерии проверки
+                    </h4>
+                    <div style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6;">
+                        {!! nl2br(e($practice->checking_criteria)) !!}
+                    </div>
+                @endif
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 16px; padding: 24px;">
+                <h4 style="color: var(--primary); font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    Техническое задание
+                </h4>
+                <div style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                    {!! nl2br(e($practice->technical_task)) !!}
+                </div>
+
+                @if($practice->result_image_path)
+                    <div style="margin-top: 24px;">
+                        <h4 style="color: var(--text-main); font-weight: 700; margin-bottom: 12px;">Результат (образец):</h4>
+                        <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-card);">
+                            <img src="{{ asset('storage/' . $practice->result_image_path) }}" style="width: 100%; display: block;" alt="Результат">
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
         
         <div style="background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 16px; padding: 24px;">
             <div class="editor-tabs">
