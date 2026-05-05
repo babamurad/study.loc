@@ -42,11 +42,14 @@ class LessonShow extends Component
 
     public function mount(Course $course, Lesson $lesson, LessonAccessService $accessService, ?int $module_practice = null): void
     {
+        \Illuminate\Support\Facades\Log::info('LessonShow mounting', ['lesson_id' => $lesson->id]);
         $this->course = $course;
         $this->lesson = $lesson->load('module.course', 'quiz.questions.answers', 'practice.testCases'); 
 
         /** @var User|null $user */
         $user = Auth::user();
+
+        \Illuminate\Support\Facades\Log::info('LessonShow user check', ['user_id' => $user?->id]);
 
         if (!$user || !$accessService->canAccess($user, $this->lesson)) {
             abort(403, 'У вас нет доступа к этому уроку.');

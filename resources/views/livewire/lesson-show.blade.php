@@ -216,7 +216,7 @@
                                 {{-- Practice Section --}}
                                 @if ($practice && $practice->is_active)
                                     <div style="margin-top: 40px;">
-                                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 24px;">💻 Практическое задание</h3>
+                                        <!-- <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 24px;">💻 Практическое задание</h3> -->
                                         
                                         @livewire(App\Livewire\PracticeEditor::class, ['practice' => $practice])
                                     </div>

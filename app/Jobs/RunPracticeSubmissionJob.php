@@ -19,7 +19,7 @@ class RunPracticeSubmissionJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-    public int $backoff = [1, 2, 4];
+    public array|int $backoff = [1, 2, 4];
     public int $timeout = 30;
 
     public function __construct(

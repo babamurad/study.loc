@@ -22,8 +22,7 @@ class SubmissionScoringService
             : 0.0;
 
         $hasFailedRequired = $results
-            ->whereHas('testCase', fn($q) => $q->where('is_required', true))
-            ->where('passed', false)
+            ->filter(fn($r) => $r->testCase->is_required && !$r->passed)
             ->isNotEmpty();
 
         $passed = $hasFailedRequired

@@ -145,7 +145,23 @@ class Edit extends Component
 
     public function save()
     {
-        $this->validate();
+        // Default practice title to lesson title if not provided
+        if ($this->practiceEnabled && empty($this->practiceTitle)) {
+            $this->practiceTitle = $this->title;
+        }
+
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Illuminate\Support\Facades\Log::error('Lesson validation failed', [
+                'errors' => $e->validator->errors()->toArray(),
+                'data' => $this->all()
+            ]);
+            $this->activeTab = 'practice'; // Switch to practice tab if error is there
+            throw $e;
+        }
+
+        \Illuminate\Support\Facades\Log::info('Lesson save starting', ['practiceEnabled' => $this->practiceEnabled, 'lesson_id' => $this->lesson->id]);
 
         $this->lesson->update([
             'course_id' => $this->course_id,
@@ -158,6 +174,7 @@ class Edit extends Component
         ]);
 
         if ($this->practiceEnabled) {
+            \Illuminate\Support\Facades\Log::info('Practice is enabled, saving...', ['title' => $this->practiceTitle]);
             $practice = Practice::updateOrCreate(
                 ['practicable_type' => \App\Models\Lesson::class, 'practicable_id' => $this->lesson->id],
                 [

@@ -74,9 +74,18 @@
 
                 @if($practiceEnabled)
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <flux:input wire:model="practiceTitle" label="Название практики" placeholder="Например: Создание карточки" />
-                        <flux:input type="number" wire:model="practiceMaxScore" label="Макс. балл" step="0.1" min="1" />
-                        <flux:input type="number" wire:model="practicePassScore" label="Проходной балл" step="0.1" min="0" />
+                        <div>
+                            <flux:input wire:model="practiceTitle" label="Название практики" placeholder="Например: Создание карточки" />
+                            <flux:error name="practiceTitle" />
+                        </div>
+                        <div>
+                            <flux:input type="number" wire:model="practiceMaxScore" label="Макс. балл" step="0.1" min="1" />
+                            <flux:error name="practiceMaxScore" />
+                        </div>
+                        <div>
+                            <flux:input type="number" wire:model="practicePassScore" label="Проходной балл" step="0.1" min="0" />
+                            <flux:error name="practicePassScore" />
+                        </div>
                     </div>
 
                     <flux:textarea wire:model="practiceDescription" label="Короткое описание" placeholder="Опишите задание..." rows="2" />

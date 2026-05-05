@@ -162,20 +162,22 @@ class PracticeEditor extends Component
         }
 
         $this->currentSubmission->refresh();
+        
+        // Update test results even while running to show progress
+        $this->testResults = $this->currentSubmission->testResults->map(fn($r) => [
+            'name' => $r->testCase->name,
+            'passed' => $r->passed,
+            'message' => $r->message,
+            'earned_weight' => $r->earned_weight,
+            'status' => $r->duration_ms > 0 ? 'completed' : 'pending' // duration_ms > 0 means it was actually run
+        ])->toArray();
 
         if ($this->currentSubmission->status === PracticeSubmission::STATUS_COMPLETED) {
             $this->isRunning = false;
             $this->showResults = true;
-            $this->testResults = $this->currentSubmission->testResults->map(fn($r) => [
-                'name' => $r->testCase->name,
-                'passed' => $r->passed,
-                'message' => $r->message,
-                'earned_weight' => $r->earned_weight,
-            ])->toArray();
         } elseif (in_array($this->currentSubmission->status, ['failed', 'timeout'])) {
             $this->isRunning = false;
             $this->showResults = true;
-            $this->testResults = [];
         }
     }
 
