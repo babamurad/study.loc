@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио | Задание №1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, 'Segoe UI', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fef9f0;
+            line-height: 1.5;
+        }
+        nav {
+            background: #2c3e50;
+            padding: 12px;
+            border-radius: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .gallery {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .gallery figure {
+            flex: 1;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8f9fa;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #2c3e50;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+        }
+        .btn-up {
+            display: inline-block;
+            margin-top: 10px;
+            color: #2c3e50;
+        }
+        #about {
+            padding-left: 60px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#about">Обо мне</a>
+    <a href="#skills">Навыки</a>
+    <a href="#gallery">Галерея</a>
+    <a href="#contacts">Контакты</a>
+</nav>
+
+<section id="about">
+    <h1>Анна Веб-разработчик</h1>
+    <p>Привет! Я <strong>начинающий фронтенд-разработчик</strong>. Обожаю создавать <em>красивые и удобные</em> интерфейсы.</p>
+    <p>Мои увлечения:</p>
+    <ul>
+        <li>Чтение технической документации</li>
+        <li>Открытые исходные коды</li>
+        <li>Горные походы</li>
+    </ul>
+</section>
+
+<section id="skills">
+    <h2>Мои навыки</h2>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Мои компетенции</th>
+            </tr>
+            <tr>
+                <th>Технология</th><th>Уровень</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>HTML5</td><td>⭐️⭐️⭐️⭐️⭐️</td></tr>
+            <tr><td rowspan="2">CSS3</td><td>Flexbox — отлично</td></tr>
+            <tr><td>Grid — изучаю</td></tr>
+            <tr><td>JavaScript</td><td>⭐️⭐️⭐️</td></tr>
+        </tbody>
+    </table>
+</section>
+
+<section id="gallery">
+    <h2>Мои работы (кликабельные картинки)</h2>
+    <div class="gallery">
+        <figure>
+            <a href="https://example.com/project1" target="_blank">
+                <img src="https://picsum.photos/id/1/200/150" alt="Проект 1">
+            </a>
+            <figcaption>Сайт-визитка</figcaption>
+        </figure>
+        <figure>
+            <a href="https://example.com/project2" target="_blank">
+                <img src="https://picsum.photos/id/2/200/150" alt="Проект 2">
+            </a>
+            <figcaption>Интернет-магазин</figcaption>
+        </figure>
+        <figure>
+            <a href="https://example.com/project3" target="_blank">
+                <img src="https://picsum.photos/id/3/200/150" alt="Проект 3">
+            </a>
+            <figcaption>Лендинг</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section id="contacts">
+    <h2>Связь со мной</h2>
+    <p>📧 <a href="mailto:anna@example.com">anna@example.com</a></p>
+    <p>📞 <a href="tel:+79001234567">+7 (900) 123-45-67</a></p>
+    <p>🐙 <a href="https://github.com" target="_blank">Мой GitHub</a></p>
+</section>
+
+<footer>
+    <p>© 2026 Анна Веб-разработчик</p>
+    <a href="#" class="btn-up">⬆ Наверх</a>
+</footer>
+
+</body>
+</html>

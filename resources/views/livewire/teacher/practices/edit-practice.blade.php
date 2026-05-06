@@ -11,6 +11,38 @@
                 <textarea wire:model="description" rows="3" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;"></textarea>
             </div>
             
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Цель задания</label>
+                <textarea wire:model="objective" rows="3" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;"></textarea>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Техническое задание</label>
+                <textarea wire:model="technicalTask" rows="4" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;"></textarea>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Критерии проверки</label>
+                <textarea wire:model="checkingCriteria" rows="3" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;"></textarea>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Изображение результата</label>
+                <input type="file" wire:model="resultImage" accept="image/*" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white;">
+                @if($resultImage)
+                    <div style="margin-top: 12px;">
+                        <p style="color: #94a3b8; font-size: 14px;">Предпросмотр:</p>
+                        <img src="{{ $resultImage->temporaryUrl() }}" style="max-width: 300px; border-radius: 8px; margin-top: 8px;">
+                    </div>
+                @elseif($existingResultImagePath)
+                    <div style="margin-top: 12px;">
+                        <p style="color: #94a3b8; font-size: 14px;">Текущее изображение:</p>
+                        <img src="{{ asset('storage/' . $existingResultImagePath) }}" style="max-width: 300px; border-radius: 8px; margin-top: 8px;">
+                    </div>
+                @endif
+                @error('resultImage') <span style="color: #ef4444; font-size: 12px;">{{ $message }}</span> @enderror
+            </div>
+            
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
                 <div>
                     <label style="display: block; margin-bottom: 8px; font-weight: 600;">Макс. балл</label>

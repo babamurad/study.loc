@@ -9,14 +9,22 @@ use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
 
 class EditPractice extends Component
 {
+    use WithFileUploads;
+
     public ?Practice $practice = null;
     public Lesson $lesson;
     
     public string $title = '';
     public string $description = '';
+    public string $objective = '';
+    public string $technicalTask = '';
+    public string $checkingCriteria = '';
+    public $resultImage = null;
+    public ?string $existingResultImagePath = null;
     public string $runnerProfile = 'frontend_html_css_js_v1';
     public float $maxScore = 10.0;
     public float $passScore = 7.0;
@@ -42,6 +50,10 @@ class EditPractice extends Component
         if ($practice) {
             $this->title = $practice->title;
             $this->description = $practice->description ?? '';
+            $this->objective = $practice->objective ?? '';
+            $this->technicalTask = $practice->technical_task ?? '';
+            $this->checkingCriteria = $practice->checking_criteria ?? '';
+            $this->existingResultImagePath = $practice->result_image_path;
             $this->runnerProfile = $practice->runner_profile;
             $this->maxScore = (float) $practice->max_score;
             $this->passScore = (float) $practice->pass_score;
@@ -92,12 +104,22 @@ class EditPractice extends Component
                 'practicable_id' => $this->lesson->id,
                 'title' => $this->title,
                 'description' => $this->description,
+                'objective' => $this->objective,
+                'technical_task' => $this->technicalTask,
+                'checking_criteria' => $this->checkingCriteria,
                 'runner_profile' => $this->runnerProfile,
                 'max_score' => $this->maxScore,
                 'pass_score' => $this->passScore,
                 'is_active' => $this->isActive,
             ]
         );
+        
+        if ($this->resultImage) {
+            $imagePath = $this->resultImage->store('practices', 'public');
+            $practice->update(['result_image_path' => $imagePath]);
+            $this->existingResultImagePath = $imagePath;
+            $this->resultImage = null;
+        }
         
         $existingIds = collect($this->testCases)
             ->pluck('existing_id')
