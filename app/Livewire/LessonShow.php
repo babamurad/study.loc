@@ -163,10 +163,6 @@ class LessonShow extends Component
             }
         }
 
-        if ($this->practice && !$this->practice->isPassedBy($user)) {
-            session()->flash('error', 'Вы должны сначала выполнить практическое задание.');
-            return;
-        }
 
         if ($accessService->completeLesson($user, $this->lesson)) {
             $this->justCompleted = true;
@@ -210,11 +206,6 @@ class LessonShow extends Component
             }
         }
 
-        if ($this->practice && $this->practice->is_active) {
-            if (!$this->practice->isPassedBy($user)) {
-                return false;
-            }
-        }
 
         return true;
     }
