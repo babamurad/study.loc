@@ -119,13 +119,11 @@
         </div>
 
         <div style="padding: 24px; background: #1e1e1e;">
-            @if($activeTab === 'html')
-                <textarea wire:model="htmlCode" style="width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="<!-- Ваш HTML код -->"></textarea>
-            @elseif($activeTab === 'css')
-                <textarea wire:model="cssCode" style="width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="/* Ваш CSS код */"></textarea>
-            @elseif($activeTab === 'js')
-                <textarea wire:model="jsCode" style="width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="// Ваш JS код"></textarea>
-            @endif
+            <textarea wire:model="htmlCode" style="display: {{ $activeTab === 'html' ? 'block' : 'none' }}; width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="<!-- Ваш HTML код -->"></textarea>
+            
+            <textarea wire:model="cssCode" style="display: {{ $activeTab === 'css' ? 'block' : 'none' }}; width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="/* Ваш CSS код */"></textarea>
+            
+            <textarea wire:model="jsCode" style="display: {{ $activeTab === 'js' ? 'block' : 'none' }}; width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="// Ваш JS код"></textarea>
         </div>
         
         <div style="padding: 16px 24px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-card); display: flex; justify-content: space-between; align-items: center;">
