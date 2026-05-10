@@ -29,7 +29,7 @@ echo $$ > "$LOCK_FILE"
 trap "rm -f '$LOCK_FILE'" EXIT INT TERM
 
 # Run queue worker
-/usr/bin/php artisan queue:work --stop-when-empty --tries=3 --timeout=50 --memory=128
+/usr/bin/php artisan queue:work --queue=practice-checks,default --stop-when-empty --tries=3 --timeout=50 --memory=128
 
 # Lock file will be automatically removed by trap
 exit 0
