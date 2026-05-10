@@ -162,6 +162,13 @@ class PracticeEditor extends Component
         }
 
         $this->currentSubmission->refresh();
+
+        if (in_array($this->currentSubmission->status, ['pending', 'running']) && 
+            $this->currentSubmission->created_at->diffInMinutes(now()) >= 2) {
+            $this->currentSubmission->status = \App\Models\PracticeSubmission::STATUS_TIMEOUT;
+            $this->currentSubmission->error_message = 'Превышено время ожидания проверки. Возможно, сервер проверок недоступен или перегружен.';
+            $this->currentSubmission->save();
+        }
         
         // Update test results even while running to show progress
         $this->testResults = $this->currentSubmission->testResults->map(fn($r) => [

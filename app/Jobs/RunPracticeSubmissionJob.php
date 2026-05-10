@@ -48,10 +48,17 @@ class RunPracticeSubmissionJob implements ShouldQueue
         $submission->save();
 
         try {
-            $runnerResult = $runnerClient->evaluate($submission);
+            if ($submission->runner_job_id) {
+                $runnerResult = $runnerClient->getJobStatus($submission->runner_job_id);
+                if (!$runnerResult) {
+                    $runnerResult = $runnerClient->evaluate($submission);
+                }
+            } else {
+                $runnerResult = $runnerClient->evaluate($submission);
+            }
 
-            $submission->runner_job_id = $runnerResult['runner_job_id'] ?? null;
-            $submission->runner_version = $runnerResult['runner_version'] ?? null;
+            $submission->runner_job_id = $runnerResult['runner_job_id'] ?? $submission->runner_job_id;
+            $submission->runner_version = $runnerResult['runner_version'] ?? $submission->runner_version;
             $submission->raw_result = $runnerResult;
             $submission->save();
 
