@@ -109,4 +109,140 @@
             </div>
         @endif
     </div>
+
+    {{-- Редактор кода --}}
+    <div class="task-card" style="margin-top: 32px; padding: 0; overflow: hidden; border: 1px solid var(--primary);">
+        <div style="display: flex; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border-card);">
+            <button wire:click="setActiveTab('html')" style="flex: 1; padding: 16px; background: {{ $activeTab === 'html' ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; color: {{ $activeTab === 'html' ? 'white' : 'var(--text-muted)' }}; border: none; border-bottom: {{ $activeTab === 'html' ? '2px solid var(--primary)' : '2px solid transparent' }}; font-weight: 600; cursor: pointer; transition: all 0.2s;">HTML</button>
+            <button wire:click="setActiveTab('css')" style="flex: 1; padding: 16px; background: {{ $activeTab === 'css' ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; color: {{ $activeTab === 'css' ? 'white' : 'var(--text-muted)' }}; border: none; border-bottom: {{ $activeTab === 'css' ? '2px solid var(--primary)' : '2px solid transparent' }}; font-weight: 600; cursor: pointer; transition: all 0.2s;">CSS</button>
+            <button wire:click="setActiveTab('js')" style="flex: 1; padding: 16px; background: {{ $activeTab === 'js' ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; color: {{ $activeTab === 'js' ? 'white' : 'var(--text-muted)' }}; border: none; border-bottom: {{ $activeTab === 'js' ? '2px solid var(--primary)' : '2px solid transparent' }}; font-weight: 600; cursor: pointer; transition: all 0.2s;">JS</button>
+        </div>
+
+        <div style="padding: 24px; background: #1e1e1e;">
+            @if($activeTab === 'html')
+                <textarea wire:model="htmlCode" style="width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="<!-- Ваш HTML код -->"></textarea>
+            @elseif($activeTab === 'css')
+                <textarea wire:model="cssCode" style="width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="/* Ваш CSS код */"></textarea>
+            @elseif($activeTab === 'js')
+                <textarea wire:model="jsCode" style="width: 100%; height: 300px; background: transparent; color: #d4d4d4; border: none; font-family: monospace; font-size: 14px; outline: none; resize: vertical;" spellcheck="false" placeholder="// Ваш JS код"></textarea>
+            @endif
+        </div>
+        
+        <div style="padding: 16px 24px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-card); display: flex; justify-content: space-between; align-items: center;">
+            <div style="color: var(--text-muted); font-size: 0.9rem;">
+                Попыток: {{ $attemptCount }} 
+                @if($bestSubmission)
+                    <span style="margin-left: 12px; color: {{ $bestSubmission->passed ? '#22c55e' : '#eab308' }}">Лучший результат: {{ $bestSubmission->score }}/10</span>
+                @endif
+            </div>
+            <button wire:click="submit" wire:loading.attr="disabled" class="submit-practice-btn" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+                <span wire:loading.remove wire:target="submit">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </span>
+                <span wire:loading wire:target="submit">
+                    <svg class="animate-spin" width="20" height="20" fill="none" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+                </span>
+                <span wire:loading.remove wire:target="submit">Проверить решение</span>
+                <span wire:loading wire:target="submit">Отправка...</span>
+            </button>
+        </div>
+    </div>
+
+    {{-- Статус проверки (когда выполняется) --}}
+    @if($isRunning)
+        <div wire:poll.2s="checkStatus" class="task-card" style="margin-top: 24px; text-align: center; border-color: #eab308; background: rgba(234, 179, 8, 0.05);">
+            <div style="margin-bottom: 16px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 2s linear infinite; margin: 0 auto;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+            </div>
+            <h4 style="color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 8px;">Решение проверяется...</h4>
+            <p style="color: var(--text-muted);">Это может занять несколько секунд. Пожалуйста, подождите.</p>
+            
+            @if(count($testResults) > 0)
+                <div style="margin-top: 24px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    @foreach($testResults as $result)
+                        <div style="padding: 12px; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+                            @if($result['status'] === 'completed')
+                                @if($result['passed'])
+                                    <span style="color: #22c55e;">✅</span>
+                                @else
+                                    <span style="color: #ef4444;">❌</span>
+                                @endif
+                            @else
+                                <span style="color: #eab308;">⏳</span>
+                            @endif
+                            <span style="color: var(--text-main);">{{ $result['name'] }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    @endif
+
+    {{-- Результаты --}}
+    @if($showResults && $currentSubmission)
+        <div class="task-card" id="practice-results" style="margin-top: 24px; border-color: {{ $currentSubmission->passed ? '#22c55e' : '#ef4444' }}; background: {{ $currentSubmission->passed ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)' }};">
+            <div style="text-align: center; margin-bottom: 24px;">
+                @if($currentSubmission->passed)
+                    <div style="width: 64px; height: 64px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);">
+                        <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h3 style="color: #22c55e; font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Решение принято!</h3>
+                    <p style="color: var(--text-main); font-size: 1.1rem;">Оценка: <strong>{{ $currentSubmission->score }}</strong> из 10</p>
+                @else
+                    <div style="width: 64px; height: 64px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);">
+                        <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </div>
+                    <h3 style="color: #ef4444; font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Задание не выполнено</h3>
+                    <p style="color: var(--text-main); font-size: 1.1rem;">Оценка: <strong>{{ $currentSubmission->score }}</strong> из 10 (проходной балл: {{ $practice->pass_score }})</p>
+                    
+                    @if($currentSubmission->error_message)
+                        <div style="margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 8px; color: #fca5a5; font-family: monospace; text-align: left; overflow-x: auto;">
+                            {{ $currentSubmission->error_message }}
+                        </div>
+                    @endif
+                @endif
+            </div>
+
+            @if($currentSubmission->status === 'completed' && count($testResults) > 0)
+                <h4 style="color: var(--text-main); font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-card); padding-bottom: 8px;">Результаты тестов:</h4>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    @foreach($testResults as $result)
+                        <div style="padding: 16px; background: rgba(0,0,0,0.2); border-left: 4px solid {{ $result['passed'] ? '#22c55e' : '#ef4444' }}; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: {{ $result['message'] ? '8px' : '0' }};">
+                                <strong style="color: var(--text-main);">{{ $result['name'] }}</strong>
+                                <span style="font-size: 0.9rem; color: var(--text-muted);">
+                                    Вес: {{ $result['earned_weight'] }} 
+                                    @if($result['passed'])
+                                        <span style="color: #22c55e; margin-left: 8px;">Пройден</span>
+                                    @else
+                                        <span style="color: #ef4444; margin-left: 8px;">Провален</span>
+                                    @endif
+                                </span>
+                            </div>
+                            @if($result['message'])
+                                <div style="color: {{ $result['passed'] ? '#86efac' : '#fca5a5' }}; font-size: 0.95rem; font-family: monospace; white-space: pre-wrap;">{{ $result['message'] }}</div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            <div style="margin-top: 32px; text-align: center;">
+                <button wire:click="retake" style="background: transparent; color: var(--text-main); border: 1px solid var(--border-card); padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;">
+                    Скрыть результаты
+                </button>
+            </div>
+            @if($currentSubmission->passed)
+                <script>
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: document.getElementById('practice-results').offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                </script>
+            @endif
+        </div>
+    @endif
 </div>
