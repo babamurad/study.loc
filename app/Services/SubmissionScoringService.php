@@ -44,7 +44,8 @@ class SubmissionScoringService
         $passed = 0;
         $earned = 0.0;
 
-        foreach ($runnerResults['tests'] ?? [] as $testResult) {
+        $tests = $runnerResults['tests'] ?? $runnerResults['results'] ?? [];
+        foreach ($tests as $testResult) {
             $testCaseId = $testResult['id'] ?? null;
             $resultModel = $testResults->get($testCaseId);
 
