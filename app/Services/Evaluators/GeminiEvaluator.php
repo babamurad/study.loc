@@ -130,12 +130,12 @@ USER;
 
     private function callGeminiApi(array $prompt, array $schema): array
     {
-        $url = "https://generativelanguage.googleapis.com/v1/models/{$this->model}:generateContent?key={$this->apiKey}";
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent?key={$this->apiKey}";
 
         $payload = array_merge($prompt, [
             'generationConfig' => [
-                'response_mime_type' => 'application/json',
-                'response_schema' => $schema,
+                'responseMimeType' => 'application/json',
+                'responseSchema' => $schema,
                 'temperature' => 0.2,
                 'topP' => 0.95,
                 'topK' => 20,
