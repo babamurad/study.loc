@@ -40,6 +40,7 @@ class PracticeTestCase extends Model
         'behavior',
         'console_errors',
         'snapshot',
+        'regex',
     ];
 
     public function practice(): BelongsTo

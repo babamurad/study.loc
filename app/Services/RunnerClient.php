@@ -178,6 +178,26 @@ class RunnerClient
                     } else {
                         $passed = true;
                     }
+                } elseif ($tc->type === 'regex') {
+                    $pattern = $tc->script['pattern'] ?? '';
+                    $target = $tc->script['target'] ?? 'html'; // 'html' or 'css' or 'js'
+                    
+                    $contentToCheck = match($target) {
+                        'css' => $cssCode,
+                        'js' => $submission->js_code ?? '',
+                        default => $htmlCode,
+                    };
+                    
+                    if ($pattern) {
+                        if (@preg_match($pattern, $contentToCheck)) {
+                            $passed = true;
+                        } else {
+                            $passed = false;
+                            $message = $tc->script['error_message'] ?? 'Код не соответствует требуемому формату (регулярному выражению).';
+                        }
+                    } else {
+                        $passed = true;
+                    }
                 } else {
                     $passed = true;
                     $message = "Автопроверка типа {$tc->type} не поддерживается. Считается успешной.";
