@@ -51,6 +51,11 @@ class PracticeEditor extends Component
             ->latest()
             ->first();
 
+        if ($this->currentSubmission) {
+            $this->isRunning = true;
+            $this->showResults = false;
+        }
+
         $this->bestSubmission = $this->practice->submissions()
             ->where('user_id', $user->id)
             ->where('passed', true)
@@ -139,7 +144,7 @@ class PracticeEditor extends Component
         $this->showResults = false;
         $this->attemptCount++;
 
-        RunPracticeSubmissionJob::dispatch($submission->id)->onQueue('practice-checks');
+        RunPracticeSubmissionJob::dispatch($submission->id);
     }
 
     public function retake(): void

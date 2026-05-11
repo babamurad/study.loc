@@ -152,8 +152,7 @@ class RunPracticeSubmissionJob implements ShouldQueue
     {
         if ($submission->runner_job_id) {
             self::dispatch($submission->id)
-                ->delay(now()->addSeconds(2))
-                ->onQueue('practice-checks');
+                ->delay(now()->addSeconds(2));
         }
     }
 }

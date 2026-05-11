@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        $this->disableForeignKeyChecks();
 
         // 1. Handle table rename and foreign key drop safely
         if (!Schema::hasTable('practices') && Schema::hasTable('lesson_practices')) {
@@ -143,12 +143,12 @@ return new class extends Migration
             }
         });
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $this->enableForeignKeyChecks();
     }
 
     public function down(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        $this->disableForeignKeyChecks();
 
         // 1. Revert practice_submissions
         Schema::table('practice_submissions', function (Blueprint $table) {
@@ -200,6 +200,20 @@ return new class extends Migration
         // 4. Rename back
         Schema::rename('practices', 'lesson_practices');
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $this->enableForeignKeyChecks();
+    }
+
+    private function disableForeignKeyChecks(): void
+    {
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        }
+    }
+
+    private function enableForeignKeyChecks(): void
+    {
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        }
     }
 };
