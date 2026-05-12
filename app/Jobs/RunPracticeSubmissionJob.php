@@ -2,10 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Contracts\PracticeEvaluatorInterface;
 use App\Models\PracticeSubmission;
 use App\Models\PracticeTestCase;
 use App\Models\PracticeTestResult;
-use App\Services\RunnerClient;
+use App\Services\RunnerException;
 use App\Services\SubmissionScoringService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,7 +27,7 @@ class RunPracticeSubmissionJob implements ShouldQueue
         public int $submissionId
     ) {}
 
-    public function handle(RunnerClient $runnerClient, SubmissionScoringService $scoringService): void
+    public function handle(PracticeEvaluatorInterface $evaluator, SubmissionScoringService $scoringService): void
     {
         $submission = PracticeSubmission::with(['practice.testCases', 'testResults'])->find($this->submissionId);
 
@@ -48,14 +49,7 @@ class RunPracticeSubmissionJob implements ShouldQueue
         $submission->save();
 
         try {
-            if ($submission->runner_job_id) {
-                $runnerResult = $runnerClient->getJobStatus($submission->runner_job_id);
-                if (!$runnerResult) {
-                    $runnerResult = $runnerClient->evaluate($submission);
-                }
-            } else {
-                $runnerResult = $runnerClient->evaluate($submission);
-            }
+            $runnerResult = $evaluator->evaluate($submission);
 
             $submission->runner_job_id = $runnerResult['runner_job_id'] ?? $submission->runner_job_id;
             $submission->runner_version = $runnerResult['runner_version'] ?? $submission->runner_version;
@@ -67,8 +61,11 @@ class RunPracticeSubmissionJob implements ShouldQueue
             } else {
                 $this->dispatchSelfForCheck($submission);
             }
-        } catch (\App\Services\RunnerException $e) {
+        } catch (RunnerException $e) {
             $this->handleRunnerError($submission, $e);
+            throw $e;
+        } catch (\RuntimeException $e) {
+            $this->handleGenericError($submission, $e);
             throw $e;
         }
     }
@@ -133,7 +130,7 @@ class RunPracticeSubmissionJob implements ShouldQueue
         }
     }
 
-    private function handleRunnerError(PracticeSubmission $submission, \App\Services\RunnerException $e): void
+    private function handleRunnerError(PracticeSubmission $submission, RunnerException $e): void
     {
         $submission->status = match ($e->getCode()) {
             0, 503 => PracticeSubmission::STATUS_FAILED,
@@ -144,12 +141,18 @@ class RunPracticeSubmissionJob implements ShouldQueue
         $submission->save();
     }
 
+    private function handleGenericError(PracticeSubmission $submission, \RuntimeException $e): void
+    {
+        $submission->status = PracticeSubmission::STATUS_FAILED;
+        $submission->error_message = $e->getMessage();
+        $submission->save();
+    }
+
     private function dispatchSelfForCheck(PracticeSubmission $submission): void
     {
         if ($submission->runner_job_id) {
             self::dispatch($submission->id)
-                ->delay(now()->addSeconds(2))
-                ->onQueue('practice-checks');
+                ->delay(now()->addSeconds(2));
         }
     }
 }

@@ -43,4 +43,14 @@ return [
         'hmac_secret' => env('RUNNER_HMAC_SECRET', 'change-me-in-production'),
     ],
 
+    'practice_evaluator' => [
+        'driver' => env('PRACTICE_EVALUATOR_DRIVER', 'local'),
+    ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
+        'timeout' => env('GEMINI_TIMEOUT', 15),
+    ],
+
 ];

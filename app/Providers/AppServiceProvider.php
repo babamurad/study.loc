@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\PracticeEvaluatorInterface;
+use App\Services\Evaluators\GeminiEvaluator;
+use App\Services\Evaluators\LocalPhpEvaluator;
+use App\Services\Evaluators\NodeRunnerEvaluator;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
             \Laravel\Fortify\Contracts\LoginResponse::class,
             \App\Http\Responses\LoginResponse::class
         );
+
+        $this->registerPracticeEvaluator();
     }
 
     /**
@@ -41,5 +47,21 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Password::defaults(fn (): Password => Password::min(8));
+    }
+
+    /**
+     * Register the practice evaluator based on the configured driver.
+     */
+    protected function registerPracticeEvaluator(): void
+    {
+        $this->app->bind(PracticeEvaluatorInterface::class, function () {
+            $driver = config('services.practice_evaluator.driver', 'local');
+
+            return match ($driver) {
+                'gemini' => new GeminiEvaluator(),
+                'node'   => new NodeRunnerEvaluator(),
+                default => new LocalPhpEvaluator(),
+            };
+        });
     }
 }
