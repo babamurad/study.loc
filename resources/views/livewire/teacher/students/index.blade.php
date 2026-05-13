@@ -63,7 +63,7 @@
                                             $courseCompleted = $student->completedLessons->where('course_id', $course->id)->count();
                                             $coursePercent = $course->lessons_count > 0 ? round(($courseCompleted / $course->lessons_count) * 100) : 0;
                                         @endphp
-                                        <flux:card class="p-4">
+                                        <flux:card class="p-4 flex flex-col h-full">
                                             <div class="flex justify-between items-start mb-2">
                                                 <div>
                                                     <flux:heading size="sm">{{ $course->title }}</flux:heading>
@@ -73,8 +73,28 @@
                                                     {{ $coursePercent }}%
                                                 </flux:badge>
                                             </div>
-                                            <div class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-1.5 mt-2">
+                                            <div class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-1.5 mt-2 mb-4">
                                                 <div class="bg-{{ $coursePercent === 100 ? 'green' : 'blue' }}-600 h-1.5 rounded-full" style="width: {{ $coursePercent }}%"></div>
+                                            </div>
+
+                                            <div class="space-y-1 mt-auto pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                                                @foreach ($course->lessons as $lesson)
+                                                    @php
+                                                        $isCompleted = $student->completedLessons->contains('id', $lesson->id);
+                                                    @endphp
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="size-4 rounded-full border flex items-center justify-center {{ $isCompleted ? 'bg-green-100 border-green-200 text-green-600 dark:bg-green-900/30 dark:border-green-800' : 'bg-zinc-50 border-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:border-zinc-700' }}">
+                                                            @if($isCompleted)
+                                                                <flux:icon name="check" class="size-2.5" />
+                                                            @else
+                                                                <span class="text-[10px] font-bold">{{ $lesson->position }}</span>
+                                                            @endif
+                                                        </div>
+                                                        <flux:text size="xs" class="{{ $isCompleted ? 'text-zinc-900 dark:text-zinc-100 font-medium' : 'text-zinc-500' }}">
+                                                            {{ $lesson->position }}. {{ $lesson->title }}
+                                                        </flux:text>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </flux:card>
                                     @endforeach

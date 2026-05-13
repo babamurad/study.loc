@@ -49,7 +49,9 @@ class Index extends Component
         }
 
         $students = $studentsQuery->paginate($this->perPage);
-        $courses = Course::withCount('lessons')->where('is_published', true)->get();
+        $courses = Course::with(['lessons' => function($query) {
+            $query->where('is_published', true)->orderBy('position');
+        }])->withCount('lessons')->where('is_published', true)->get();
 
         return view('livewire.teacher.students.index', [
             'students' => $students,
