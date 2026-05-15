@@ -33,7 +33,7 @@
                                     <flux:avatar :name="$student->name" :initials="$student->initials()" size="sm" />
                                     <div>
                                         <div class="text-zinc-900 dark:text-white font-medium">{{ $student->name }}</div>
-                                        <flux:text variant="subtle" size="sm">{{ $student->email }}</flux:text>
+                                        <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $student->email }}</flux:text>
                                     </div>
                                 </div>
                             </td>
@@ -42,9 +42,9 @@
                                     <div class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2">
                                         <div class="bg-blue-600 h-2 rounded-full" style="width: {{ $totalPercent }}%"></div>
                                     </div>
-                                    <flux:text variant="subtle" size="sm">{{ $totalPercent }}%</flux:text>
+                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $totalPercent }}%</flux:text>
                                 </div>
-                                <flux:text variant="subtle" size="xs">{{ $studentCompleted }} из {{ $totalLessons }} уроков</flux:text>
+                                <flux:text variant="subtle" size="xs" class="dark:text-zinc-500">{{ $studentCompleted }} из {{ $totalLessons }} уроков</flux:text>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right">
                                 <flux:button @click="activeStudent === {{ $student->id }} ? activeStudent = null : activeStudent = {{ $student->id }}" 
@@ -67,7 +67,7 @@
                                             <div class="flex justify-between items-start mb-2">
                                                 <div>
                                                     <flux:heading size="sm">{{ $course->title }}</flux:heading>
-                                                    <flux:text variant="subtle" size="xs">{{ $courseCompleted }} / {{ $course->lessons_count }} уроков</flux:text>
+                                                    <flux:text variant="subtle" size="xs" class="dark:text-zinc-400">{{ $courseCompleted }} / {{ $course->lessons_count }} уроков</flux:text>
                                                 </div>
                                                 <flux:badge size="sm" color="{{ $coursePercent === 100 ? 'green' : ($coursePercent > 0 ? 'blue' : 'zinc') }}">
                                                     {{ $coursePercent }}%
@@ -83,14 +83,14 @@
                                                         $isCompleted = $student->completedLessons->contains('id', $lesson->id);
                                                     @endphp
                                                     <div class="flex items-center gap-2">
-                                                        <div class="size-4 rounded-full border flex items-center justify-center {{ $isCompleted ? 'bg-green-100 border-green-200 text-green-600 dark:bg-green-900/30 dark:border-green-800' : 'bg-zinc-50 border-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:border-zinc-700' }}">
+                                                        <div class="size-4 rounded-full border flex items-center justify-center {{ $isCompleted ? 'bg-green-100 border-green-200 text-green-600 dark:bg-green-900/30 dark:border-green-800' : 'bg-zinc-50 border-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400' }}">
                                                             @if($isCompleted)
                                                                 <flux:icon name="check" class="size-2.5" />
                                                             @else
                                                                 <span class="text-[10px] font-bold">{{ $lesson->position }}</span>
                                                             @endif
                                                         </div>
-                                                        <flux:text size="xs" class="{{ $isCompleted ? 'text-zinc-900 dark:text-zinc-100 font-medium' : 'text-zinc-500' }}">
+                                                        <flux:text size="xs" class="{{ $isCompleted ? 'text-zinc-900 dark:text-zinc-100 font-medium' : 'text-zinc-500 dark:text-zinc-400' }}">
                                                             {{ $lesson->position }}. {{ $lesson->title }}
                                                         </flux:text>
                                                     </div>

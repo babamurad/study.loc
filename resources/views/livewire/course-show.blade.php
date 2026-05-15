@@ -68,7 +68,7 @@
                                 {{-- Status Badge & Action Button --}}
                                 <div>
                                     @if($status === 'locked')
-                                        <span style="font-size: 0.875rem; font-weight: 500; padding: 6px 12px; border-radius: 99px; background: rgba(100, 116, 139, 0.2); color: #475569;">Заблокирован</span>
+                                        <span style="font-size: 0.875rem; font-weight: 500; padding: 6px 12px; border-radius: 99px; background: rgba(100, 116, 139, 0.2); color: var(--text-muted);">Заблокирован</span>
                                     @elseif($status === 'available')
                                         <a href="{{ route('lessons.show', ['course' => $course->id, 'lesson' => $lesson->id]) }}"
                                            style="text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 12px; background: rgba(99, 102, 241, 0.1); color: #6366f1;">

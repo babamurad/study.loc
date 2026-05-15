@@ -33,7 +33,7 @@
                             <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2.5 mb-2">
                                 <div class="bg-indigo-600 dark:bg-indigo-500 h-2.5 rounded-full" style="width: {{ $item['percentage'] }}%"></div>
                             </div>
-                            <p class="text-xs text-neutral-500">
+                            <p class="text-xs text-neutral-500 dark:text-neutral-400">
                                 Пройдено {{ $item['completed_lessons'] }} из {{ $item['total_lessons'] }} уроков
                             </p>
                         </div>
