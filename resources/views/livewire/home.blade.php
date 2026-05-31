@@ -66,14 +66,26 @@
                     @foreach($course->modules as $module)
                         @php
                             $firstLesson = $module->lessons->first();
-                            $status = $user ? $lessonAccessService->getStatus($user, $firstLesson) : ($module->position == 1 ? 'available' : 'locked');
-                            $isActive = $currentLesson && $currentLesson->module_id === $module->id;
-                            $isLocked = $status === 'locked';
-                            $isCompleted = $status === 'completed';
                             $lessonCount = $module->lessons->count();
                         @endphp
 
-                        <a href="{{ $isLocked ? '#' : route('lessons.show', ['course' => $course->id, 'lesson' => $firstLesson->id]) }}" 
+                        @if($firstLesson)
+                            @php
+                                $status = $user ? $lessonAccessService->getStatus($user, $firstLesson) : ($module->position == 1 ? 'available' : 'locked');
+                                $isActive = $currentLesson && $currentLesson->module_id === $module->id;
+                                $isLocked = $status === 'locked';
+                                $isCompleted = $status === 'completed';
+                            @endphp
+                        @else
+                            @php
+                                $status = 'locked';
+                                $isActive = false;
+                                $isLocked = true;
+                                $isCompleted = false;
+                            @endphp
+                        @endif
+
+                        <a href="{{ ($isLocked || !$firstLesson) ? '#' : route('lessons.show', ['course' => $course->id, 'lesson' => $firstLesson->id]) }}" 
                            class="roadmap-item {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}"
                            @if($isLocked) onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" @endif
                         >
