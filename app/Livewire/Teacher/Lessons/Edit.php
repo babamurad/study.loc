@@ -84,6 +84,13 @@ class Edit extends Component
         $prevLesson = $lesson->previousLesson();
         $this->insert_after_id = $prevLesson?->id ?? 0;
 
+        if (!session()->has('lessons_index_url')) {
+            $prev = url()->previous();
+            if (str_contains($prev, route('teacher.lessons.index'))) {
+                session()->put('lessons_index_url', $prev);
+            }
+        }
+
         $this->loadPractice();
     }
 
@@ -242,7 +249,7 @@ class Edit extends Component
 
         session()->flash('success', 'Урок успешно обновлен.');
 
-        return redirect()->route('teacher.lessons.index', ['page' => $this->page]);
+        return redirect()->to(session()->pull('lessons_index_url', route('teacher.lessons.index', ['page' => $this->page])));
     }
 
     protected function calculatePosition(): float
