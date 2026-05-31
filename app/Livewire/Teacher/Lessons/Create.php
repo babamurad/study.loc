@@ -36,6 +36,13 @@ class Create extends Component
     public function mount(): void
     {
         $this->insert_after_id = 0;
+
+        if (!session()->has('lessons_index_url')) {
+            $prev = url()->previous();
+            if (str_contains($prev, route('teacher.lessons.index'))) {
+                session()->put('lessons_index_url', $prev);
+            }
+        }
     }
 
     public function updatedCourseId(): void
@@ -74,7 +81,7 @@ class Create extends Component
 
         session()->flash('success', 'Урок успешно создан.');
 
-        return redirect()->route('teacher.lessons.index');
+        return redirect()->to(session()->pull('lessons_index_url', route('teacher.lessons.index')));
     }
 
     protected function calculatePosition(): float
