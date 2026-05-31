@@ -86,7 +86,7 @@ class Edit extends Component
             'name' => '',
             'type' => 'dom',
             'weight' => 2.0,
-            'script' => '{"selector": ".element", "exists": true}',
+            'script' => '',
             'timeout_ms' => 1000,
             'is_required' => false,
             'sort_order' => count($this->practiceTestCases),

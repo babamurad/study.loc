@@ -23,9 +23,8 @@
 
         <div class="grid">
             @if($currentLesson)
-            <a href="{{ route('lessons.show', ['course' => $course, 'lesson' => $currentLesson]) }}" class="card">
+            <a href="{{ route('lessons.show', ['course' => $currentLesson->course_id, 'lesson' => $currentLesson]) }}" class="card">
                 <div class="card-icon">📖</div>
-                <div class="roadmap-week">Неделя {{ $currentLesson->module->position }}</div>
                 <h3>Текущий урок: {{ $currentLesson->title }}</h3>
                 <p>{{ Str::limit($currentLesson->content, 100) }}</p>
                 <div class="card-footer">
@@ -56,39 +55,48 @@
             <h2>Дорожная карта обучения</h2>
         </section>
 
-        <div class="roadmap">
-            @foreach($course->modules as $module)
-                @php
-                    $firstLesson = $module->lessons->first();
-                    $status = $user ? $lessonAccessService->getStatus($user, $firstLesson) : ($module->position === 1 ? 'available' : 'locked');
-                    $isActive = $currentLesson && $currentLesson->module_id === $module->id;
-                    $isLocked = $status === 'locked';
-                    $isCompleted = $status === 'completed';
-                    $lessonCount = $module->lessons->count();
-                @endphp
+        @foreach($courses as $course)
+            <div class="roadmap-section">
+                <div class="course-header">
+                    <h3 class="course-title">{{ $course->title }}</h3>
+                    <p class="course-desc">{{ $course->description }}</p>
+                </div>
 
-                <a href="{{ $isLocked ? '#' : route('lessons.show', ['course' => $course->id, 'lesson' => $firstLesson->id]) }}" 
-                   class="roadmap-item {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}"
-                   @if($isLocked) onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" @endif
-                >
-                    <div class="roadmap-content">
-                        <span class="roadmap-week">Неделя {{ $module->position }}</span>
-                        <h4 class="roadmap-title">{{ $module->title }}</h4>
-                        <p class="roadmap-desc">
-                            {{ $lessonCount }} {{ $lessonCount % 10 == 1 && $lessonCount % 100 != 11 ? 'урок' : ($lessonCount % 10 >= 2 && $lessonCount % 10 <= 4 && ($lessonCount % 100 < 10 || $lessonCount % 100 >= 20) ? 'урока' : 'уроков') }}
-                            &bull; 
-                            @if($isLocked)
-                                <span style="color: var(--text-muted);">Заблокировано</span>
-                            @elseif($isCompleted)
-                                <span style="color: #22c55e;">Пройдено</span>
-                            @else
-                                <span style="color: var(--primary-light);">Доступно</span>
-                            @endif
-                        </p>
-                    </div>
-                </a>
-            @endforeach
-        </div>
+                <div class="roadmap">
+                    @foreach($course->modules as $module)
+                        @php
+                            $firstLesson = $module->lessons->first();
+                            $status = $user ? $lessonAccessService->getStatus($user, $firstLesson) : ($module->position == 1 ? 'available' : 'locked');
+                            $isActive = $currentLesson && $currentLesson->module_id === $module->id;
+                            $isLocked = $status === 'locked';
+                            $isCompleted = $status === 'completed';
+                            $lessonCount = $module->lessons->count();
+                        @endphp
+
+                        <a href="{{ $isLocked ? '#' : route('lessons.show', ['course' => $course->id, 'lesson' => $firstLesson->id]) }}" 
+                           class="roadmap-item {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}"
+                           @if($isLocked) onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" @endif
+                        >
+                            <div class="roadmap-content">
+                                <span class="roadmap-week">Неделя {{ $module->position }}</span>
+                                <h4 class="roadmap-title">{{ $module->title }}</h4>
+                                <p class="roadmap-desc">
+                                    {{ $lessonCount }} {{ $lessonCount % 10 == 1 && $lessonCount % 100 != 11 ? 'урок' : ($lessonCount % 10 >= 2 && $lessonCount % 10 <= 4 && ($lessonCount % 100 < 10 || $lessonCount % 100 >= 20) ? 'урока' : 'уроков') }}
+                                    &bull; 
+                                    @if($isLocked)
+                                        <span style="color: var(--text-muted);">Заблокировано</span>
+                                    @elseif($isCompleted)
+                                        <span style="color: #22c55e;">Пройдено</span>
+                                    @else
+                                        <span style="color: var(--primary-light);">Доступно</span>
+                                    @endif
+                                </p>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
     </main>
 
     <footer>

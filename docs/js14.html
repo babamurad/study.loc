@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #1a202c; font-family: 'Montserrat', sans-serif; padding: 40px; color: white; display: flex; flex-direction: column; align-items: center; }
+        .window { background: #2d3748; width: 550px; border-radius: 4px; border: 1px solid #4a5568; box-shadow: 0 10px 25px rgba(0,0,0,0.4); overflow: hidden; }
+        .header { background: #1e293b; padding: 0 0 0 15px; font-size: 12px; color: #94a3b8; font-family: monospace; display: flex; justify-content: space-between; align-items: center; height: 32px; user-select: none; }
+        .win-controls { display: flex; height: 100%; }
+        .win-btn { width: 46px; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #94a3b8; font-family: sans-serif; }
+        .win-btn.close:hover { background-color: #e81123; color: white; }
+        .win-btn:not(.close):hover { background-color: #334155; }
+        .content { padding: 20px; font-family: monospace; font-size: 14px; background: #111827; min-height: 110px; }
+        .line { color: #94a3b8; margin-bottom: 8px; }
+        .result { color: #10b981; font-weight: bold; margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+    <p style="color: #94a3b8; margin-bottom: 20px;">Результат вызова функции в Console (F12)</p>
+    <div class="window">
+        <div class="header">
+            <span>Console</span>
+            <div class="win-controls">
+                <div class="win-btn">─</div>
+                <div class="win-btn">🗖</div>
+                <div class="win-btn close">✕</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="line">> calculateDamage(50, 2);</div>
+            <div class="result">Итоговый урон: 100</div>
+            <div class="line">> calculateDamage(100, 3);</div>
+            <div class="result">Итоговый урон: 300</div>
+        </div>
+    </div>
+</body>
+</html>

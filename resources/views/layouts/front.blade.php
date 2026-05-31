@@ -241,6 +241,30 @@
             background: linear-gradient(to bottom, var(--primary), var(--secondary), transparent);
         }
 
+        .roadmap-section {
+            margin-bottom: 60px;
+        }
+
+        .roadmap-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .course-header {
+            margin-bottom: 32px;
+            padding-left: 20px;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .course-desc {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+        }
+
         .roadmap-item {
             position: relative;
             margin-bottom: 40px;

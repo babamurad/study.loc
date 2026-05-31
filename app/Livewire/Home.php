@@ -17,22 +17,24 @@ class Home extends Component
 {
     public function render(LessonAccessService $lessonAccessService): View
     {
-        /** @var Course|null $course */
-        $course = Course::query()->with(['modules.lessons' => fn($q) => $q->orderBy('position')])->first();
-        
+        $courses = Course::query()->with(['modules.lessons' => fn($q) => $q->orderBy('position')])->get();
+
         $currentLesson = null;
         $user = Auth::user();
-        
-        if ($course) {
-            if ($user) {
+
+        if ($user) {
+            foreach ($courses as $course) {
                 $currentLesson = $lessonAccessService->getFirstAvailableLesson($user, $course);
-            } else {
-                $currentLesson = $course->lessons()->orderBy('position')->first();
+                if ($currentLesson) {
+                    break;
+                }
             }
+        } elseif ($courses->isNotEmpty()) {
+            $currentLesson = $courses->first()->lessons()->orderBy('position')->first();
         }
-        
+
         return view('livewire.home', [
-            'course' => $course,
+            'courses' => $courses,
             'currentLesson' => $currentLesson,
             'user' => $user,
             'lessonAccessService' => $lessonAccessService,
