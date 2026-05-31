@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #1a202c; 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            gap: 50px; 
+            padding: 60px; 
+        }
+        .preview-box { 
+            text-align: center; 
+            color: #a0aec0; 
+            font-size: 14px; 
+        }
+        .game-card { 
+            width: 240px; 
+            background: #2d3748; 
+            border: 1px solid #4a5568; 
+            border-radius: 12px; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            text-align: center; 
+            color: white; 
+            position: relative; 
+        }
+        .game-cover { 
+            height: 120px; 
+            background: #4f46e5; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            font-size: 44px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .game-cover span {
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        button { 
+            width: 100%; 
+            padding: 10px; 
+            background: #10b981; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: bold; 
+        }
+        
+        /* Начальное состояние бэйджа */
+        .badge-normal { 
+            position: absolute; 
+            top: -10px; 
+            right: -10px; 
+            background: #ef4444; 
+            color: white; 
+            padding: 4px 12px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            border-radius: 20px; 
+            transition: all 0.3s;
+        }
+        
+        /* Пиковое состояние анимации (50%) — меняем цвет и увеличиваем */
+        .badge-pulse { 
+            position: absolute; 
+            top: -12px; 
+            right: -12px; 
+            background: #f59e0b; /* Меняем на сочный желтый цвет */
+            color: #1a202c;
+            padding: 5px 14px; 
+            font-size: 12px; 
+            font-weight: 900; 
+            border-radius: 20px; 
+            transform: scale(1.2); /* Заметное увеличение */
+            box-shadow: 0 0 20px #f59e0b; 
+        }
+        
+        /* Четкий поворот ракеты боком */
+        .spin-rocket { 
+            transform: rotate(90deg); 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preview-box">
+        <p style="margin-bottom: 15px;">Кадр 1 (0% / 100%)</p>
+        <div class="game-card">
+            <div class="badge-normal">АКЦИЯ</div>
+            <div class="game-cover"><span>🚀</span></div>
+            <h3 style="margin:0 0 15px 0; font-size: 18px;">Action Game</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+
+    <div class="preview-box">
+        <p style="margin-bottom: 15px;">Кадр 2 (В движении 50%)</p>
+        <div class="game-card">
+            <div class="badge-pulse">АКЦИЯ</div>
+            <div class="game-cover"><span class="spin-rocket">🚀</span></div>
+            <h3 style="margin:0 0 15px 0; font-size: 18px;">Action Game</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { background-color: #1a202c; font-family: sans-serif; display: flex; justify-content: center; gap: 40px; padding: 60px; }
+        .preview-box { text-align: center; color: #a0aec0; font-size: 14px; }
+        .game-card { width: 240px; background: #2d3748; border: 1px solid #4a5568; border-radius: 12px; padding: 20px; box-sizing: border-box; text-align: center; color: white; }
+        .game-cover { height: 100px; background: #4f46e5; border-radius: 8px; margin-bottom: 15px; font-size: 40px; display: flex; align-items: center; justify-content: center; }
+        button { width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: bold; font-family: sans-serif; }
+        
+        /* Эмуляция ховера с трансформациями для правой карточки */
+        .transformed { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); border-color: #6366f1; }
+        .transformed .game-cover { transform: scale(1.1); background: #6366f1; }
+        .transformed button { transform: rotate(3deg); background: #12d795; }
+    </style>
+</head>
+<body>
+    <div class="preview-box">
+        <p>Обычное состояние</p>
+        <div class="game-card">
+            <div class="game-cover">🎮</div>
+            <h3 style="margin:0 0 15px 0;">Minecraft</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+    <div class="preview-box">
+        <p>Состояние под Transform</p>
+        <div class="game-card transformed">
+            <div class="game-cover">🎮</div>
+            <h3 style="margin:0 0 15px 0;">Minecraft</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+</body>
+</html>

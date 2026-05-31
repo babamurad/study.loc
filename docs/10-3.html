@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #1a202c; 
+            font-family: 'Montserrat', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            gap: 50px; 
+            padding: 60px; 
+        }
+        .preview-box { 
+            text-align: center; 
+            color: #a0aec0; 
+            font-size: 14px; 
+        }
+        .game-card { 
+            width: 240px; 
+            background: #2d3748; 
+            border: 1px solid #4a5568; 
+            border-radius: 12px; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            text-align: center; 
+            color: white; 
+            position: relative; 
+        }
+        .game-cover { 
+            height: 120px; 
+            background: #4f46e5; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            font-size: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .game-cover span {
+            display: inline-block;
+        }
+        button { 
+            width: 100%; 
+            padding: 10px; 
+            background: #10b981; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: bold; 
+        }
+        
+        .badge-normal { 
+            position: absolute; 
+            top: -10px; 
+            right: -10px; 
+            background: #ef4444; 
+            color: white; 
+            padding: 4px 12px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            border-radius: 20px; 
+        }
+        
+        /* Исправленная симуляция кадров @keyframes */
+        .badge-pulse { 
+            position: absolute; 
+            top: -10px; 
+            right: -10px; 
+            background: #ef4444; 
+            color: white; 
+            padding: 4px 12px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            border-radius: 20px; 
+            transform: scale(1.1); 
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); 
+        }
+        
+        /* Крутится только шестеренка внутри, а не сам блок */
+        .spin-gear { 
+            transform: rotate(45deg); 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preview-box">
+        <p style="margin-bottom: 15px;">Кадр 1 (0% / 100%)</p>
+        <div class="game-card">
+            <div class="badge-normal">АКЦИЯ</div>
+            <div class="game-cover"><span>⚙️</span></div>
+            <h3 style="margin:0 0 15px 0; font-size: 18px;">Strategy</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+
+    <div class="preview-box">
+        <p style="margin-bottom: 15px;">Кадр 2 (В движении 50%)</p>
+        <div class="game-card">
+            <div class="badge-pulse">АКЦИЯ</div>
+            <div class="game-cover"><span class="spin-gear">⚙️</span></div>
+            <h3 style="margin:0 0 15px 0; font-size: 18px;">Strategy</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+
+</body>
+</html>

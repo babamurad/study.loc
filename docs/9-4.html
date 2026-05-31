@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Превью для урока 9.4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a202c; /* Фон как в твоей админке */
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Контейнер каталога из ТЗ */
+        .games-catalog {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 900px;
+            background: #2d3748;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #4a5568;
+        }
+
+        /* Карточка товара из ТЗ */
+        .game-card {
+            flex: 1 1 calc(33.333% - 14px); /* Ровно 3 в ряд с учетом gap */
+            min-width: 240px;
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #e2e8f0;
+        }
+
+        /* Заглушка под постер игры */
+        .game-cover {
+            height: 120px;
+            background: linear-gradient(135deg, #4f46e5, #10b981);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        /* Кнопка купить из ТЗ */
+        .game-card button {
+            width: 100%;
+            padding: 10px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="games-catalog">
+        <div class="game-card">
+            <div class="game-cover">🎮</div>
+            <h3>Minecraft</h3>
+            <button>Купить</button>
+        </div>
+        <div class="game-card">
+            <div class="game-cover">⚔️</div>
+            <h3>Witcher 3</h3>
+            <button>Купить</button>
+        </div>
+        <div class="game-card">
+            <div class="game-cover">🏎️</div>
+            <h3>NFS Heat</h3>
+            <button>Купить</button>
+        </div>
+        <div class="game-card">
+            <div class="game-cover">🔫</div>
+            <h3>CS 2</h3>
+            <button>Купить</button>
+        </div>
+        <div class="game-card">
+            <div class="game-cover">⚽</div>
+            <h3>FIFA 26</h3>
+            <button>Купить</button>
+        </div>
+        <div class="game-card">
+            <div class="game-cover">🏹</div>
+            <h3>Cyberpunk</h3>
+            <button>Купить</button>
+        </div>
+    </div>
+
+</body>
+</html>
