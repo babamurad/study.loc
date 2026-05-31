@@ -55,15 +55,28 @@
             <h2>Дорожная карта обучения</h2>
         </section>
 
-        @foreach($courses as $course)
+        {{-- Course Tabs --}}
+        @if($courses->count() > 1)
+            <div class="course-tabs">
+                @foreach($courses as $course)
+                    <button wire:click="selectCourse({{ $course->id }})"
+                            class="course-tab {{ $selectedCourseId === $course->id ? 'active' : '' }}">
+                        {{ $course->title }}
+                    </button>
+                @endforeach
+            </div>
+        @endif
+
+        {{-- Selected Course Roadmap --}}
+        @if($selectedCourse)
             <div class="roadmap-section">
                 <div class="course-header">
-                    <h3 class="course-title">{{ $course->title }}</h3>
-                    <p class="course-desc">{{ $course->description }}</p>
+                    <h3 class="course-title">{{ $selectedCourse->title }}</h3>
+                    <p class="course-desc">{{ $selectedCourse->description }}</p>
                 </div>
 
                 <div class="roadmap">
-                    @foreach($course->modules as $module)
+                    @foreach($selectedCourse->modules as $module)
                         @php
                             $firstLesson = $module->lessons->first();
                             $lessonCount = $module->lessons->count();
@@ -85,7 +98,7 @@
                             @endphp
                         @endif
 
-                        <a href="{{ ($isLocked || !$firstLesson) ? '#' : route('lessons.show', ['course' => $course->id, 'lesson' => $firstLesson->id]) }}" 
+                        <a href="{{ ($isLocked || !$firstLesson) ? '#' : route('lessons.show', ['course' => $selectedCourse->id, 'lesson' => $firstLesson->id]) }}" 
                            class="roadmap-item {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}"
                            @if($isLocked) onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" @endif
                         >
@@ -108,7 +121,7 @@
                     @endforeach
                 </div>
             </div>
-        @endforeach
+        @endif
     </main>
 
     <footer>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #1a202c; font-family: 'Montserrat', sans-serif; padding: 40px; color: white; display: flex; flex-direction: column; align-items: center; }
+        .window { background: #ffffff; width: 450px; border-radius: 4px; border: 1px solid #cbd5e1; box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden; color: #1f2937; }
+        .header { background: #f1f5f9; padding: 0 0 0 15px; font-size: 12px; color: #64748b; display: flex; justify-content: space-between; align-items: center; height: 32px; border-bottom: 1px solid #e2e8f0; }
+        .win-controls { display: flex; height: 100%; }
+        .win-btn { width: 46px; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: sans-serif; }
+        .win-btn.close:hover { background-color: #e81123; color: white; }
+        .win-btn:not(.close):hover { background-color: #e2e8f0; }
+        .content { padding: 30px; text-align: center; background: #ffffff; }
+        
+        .status-text { font-size: 24px; color: #10b981; margin: 0 0 20px 0; font-weight: bold; }
+        .wake-btn { background: #8b5cf6; color: white; border: none; padding: 12px 24px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.2); }
+    </style>
+</head>
+<body>
+    <p style="color: #94a3b8; margin-bottom: 20px;">Состояние интерфейса ПОСЛЕ клика по кнопке</p>
+    <div class="window">
+        <div class="header">
+            <span>Интерактивный сайт</span>
+            <div class="win-controls">
+                <div class="win-btn">─</div>
+                <div class="win-btn">🗖</div>
+                <div class="win-btn close">✕</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="status-text">Сайт успешно ожил!</div>
+            <button class="wake-btn">Разбудить</button>
+        </div>
+    </div>
+</body>
+</html>
