@@ -29,7 +29,7 @@ class Lesson extends Model
     {
         return [
             'is_published' => 'boolean',
-            'position' => 'integer',
+            'position' => 'float',
         ];
     }
 

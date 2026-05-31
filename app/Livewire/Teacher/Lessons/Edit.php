@@ -36,11 +36,10 @@ class Edit extends Component
     #[Rule('required|string')]
     public string $content = '';
 
-    #[Rule('required|integer|min:0')]
-    public int $position = 0;
-
     #[Rule('boolean')]
     public bool $is_published = false;
+
+    public ?int $insert_after_id = null;
 
     // Practice properties
     public ?Practice $practice = null;
@@ -80,10 +79,18 @@ class Edit extends Component
         $this->title = $lesson->title;
         $this->slug = $lesson->slug;
         $this->content = $lesson->content;
-        $this->position = (int) $lesson->position;
         $this->is_published = (bool) $lesson->is_published;
 
+        $prevLesson = $lesson->previousLesson();
+        $this->insert_after_id = $prevLesson?->id ?? 0;
+
         $this->loadPractice();
+    }
+
+    public function updatedCourseId(): void
+    {
+        $this->module_id = null;
+        $this->insert_after_id = 0;
     }
 
     private function loadPractice(): void
@@ -169,7 +176,7 @@ class Edit extends Component
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
-            'position' => $this->position,
+            'position' => $this->calculatePosition(),
             'is_published' => $this->is_published,
         ]);
 
@@ -238,11 +245,47 @@ class Edit extends Component
         return redirect()->route('teacher.lessons.index', ['page' => $this->page]);
     }
 
+    protected function calculatePosition(): float
+    {
+        $lessons = Lesson::where('course_id', $this->course_id)
+            ->orderBy('position')
+            ->get()
+            ->reject(fn ($l) => $l->id === $this->lesson->id)
+            ->values();
+
+        if ($lessons->isEmpty()) {
+            return 1.0;
+        }
+
+        if ($this->insert_after_id === null || $this->insert_after_id === 0) {
+            return $lessons->first()->position / 2;
+        }
+
+        $afterLesson = $lessons->firstWhere('id', $this->insert_after_id);
+
+        if (!$afterLesson) {
+            return $lessons->last()->position + 1;
+        }
+
+        $nextLesson = $lessons->firstWhere('position', '>', $afterLesson->position);
+
+        if (!$nextLesson) {
+            return $afterLesson->position + 1;
+        }
+
+        return ($afterLesson->position + $nextLesson->position) / 2;
+    }
+
     public function render()
     {
+        $existingLessons = $this->course_id
+            ? Lesson::where('course_id', $this->course_id)->where('id', '!=', $this->lesson->id)->orderBy('position')->get()
+            : collect();
+
         return view('livewire.teacher.lessons.edit', [
             'courses' => Course::all(),
             'modules' => $this->course_id ? Module::where('course_id', $this->course_id)->get() : collect(),
+            'existingLessons' => $existingLessons,
         ]);
     }
 }

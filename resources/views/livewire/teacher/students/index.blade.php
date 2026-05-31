@@ -87,11 +87,11 @@
                                                             @if($isCompleted)
                                                                 <flux:icon name="check" class="size-2.5" />
                                                             @else
-                                                                <span class="text-[10px] font-bold">{{ $lesson->position }}</span>
+                                                                <span class="text-[10px] font-bold">{{ $loop->iteration }}</span>
                                                             @endif
                                                         </div>
                                                         <flux:text size="xs" class="{{ $isCompleted ? 'text-zinc-900 dark:text-zinc-100 font-medium' : 'text-zinc-500 dark:text-zinc-400' }}">
-                                                            {{ $lesson->position }}. {{ $lesson->title }}
+                                                            {{ $loop->iteration }}. {{ $lesson->title }}
                                                         </flux:text>
                                                     </div>
                                                 @endforeach

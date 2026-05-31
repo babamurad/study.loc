@@ -23,7 +23,7 @@ final readonly class LessonAccessService
         }
 
         // The first lesson is always available.
-        if ($lesson->position === 1) {
+        if ($lesson->position == 1) {
             return true;
         }
 

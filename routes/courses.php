@@ -24,9 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ['status' => 'completed', 'completed_at' => now()]
         );
 
-        $nextLesson = Lesson::where('course_id', $lesson->course_id)
-            ->where('position', $lesson->position + 1)
-            ->first();
+        $nextLesson = $lesson->nextLesson();
 
         if ($nextLesson) {
             return redirect()->route('lessons.show', [

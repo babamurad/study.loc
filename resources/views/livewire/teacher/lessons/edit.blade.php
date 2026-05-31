@@ -54,7 +54,16 @@
                 <flux:textarea wire:model="content" label="Содержимое" placeholder="Текст урока (поддерживается HTML/Markdown)" rows="10" />
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                    <flux:input type="number" wire:model="position" label="Позиция" />
+                    <flux:field>
+                        <flux:label>Позиция</flux:label>
+                        <flux:select wire:model="insert_after_id">
+                            <flux:select.option value="0">В начало списка</flux:select.option>
+                            @foreach ($existingLessons as $lesson)
+                                <flux:select.option value="{{ $lesson->id }}">После «{{ $lesson->title }}»</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                        <flux:error name="insert_after_id" />
+                    </flux:field>
                     <flux:checkbox wire:model="is_published" label="Опубликован" />
                 </div>
 
