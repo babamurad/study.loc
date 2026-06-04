@@ -56,7 +56,7 @@
                 <flux:card>
                     <div class="flex justify-between items-center mb-4">
                         <flux:heading size="md">Вопрос {{ $qIndex + 1 }}</flux:heading>
-                        <flux:button wire:click="removeQuestion({{ $qIndex }})" variant="ghost" color="red" size="sm" icon="trash" />
+                        <flux:button wire:click="removeQuestion({{ $qIndex }})" variant="danger" size="sm" icon="trash" />
                     </div>
                     
                     <div class="mb-4">
@@ -83,7 +83,7 @@
                                     <flux:input wire:model="questions.{{ $qIndex }}.answers.{{ $aIndex }}.answer" placeholder="Вариант ответа" />
                                 </div>
                                 <div>
-                                    <flux:button wire:click="removeAnswer({{ $qIndex }}, {{ $aIndex }})" variant="ghost" color="red" size="sm" icon="x-mark" />
+                                    <flux:button wire:click="removeAnswer({{ $qIndex }}, {{ $aIndex }})" variant="danger" size="sm" icon="x-mark" />
                                 </div>
                             </div>
                         @endforeach

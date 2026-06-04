@@ -71,7 +71,7 @@
                                 Далее
                             </flux:button>
                         @else
-                            <flux:button wire:click="submitQuiz" variant="primary" color="indigo" class="font-bold shadow-md hover:shadow-lg transition-shadow">
+                            <flux:button wire:click="submitQuiz" variant="primary" class="font-bold shadow-md hover:shadow-lg transition-shadow">
                                 Завершить тест
                             </flux:button>
                         @endif
