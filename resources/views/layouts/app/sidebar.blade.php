@@ -20,6 +20,9 @@
                         <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                             {{ __('Dashboard') }}
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="document-text" :href="route('quizzes.index')" :current="request()->routeIs('quizzes.*')" wire:navigate>
+                            Тесты
+                        </flux:sidebar.item>
                     @endif
                 </flux:sidebar.group>
 

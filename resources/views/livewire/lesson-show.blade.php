@@ -152,66 +152,6 @@
                         {{-- Only show Quiz and Complete button for the ACTIVE lesson --}}
                         @if($isActive)
                             <div style="margin-top: 40px; border-top: 1px solid var(--border-lesson); padding-top: 40px;">
-                                {{-- Quiz Section --}}
-                                @if ($quiz)
-                                    <div style="margin-top: 40px;">
-                                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 24px;">Проверка знаний</h3>
-
-                                        @if ($quizResult)
-                                            <div style="text-align: center;">
-                                                @if ($quizResult['passed'])
-                                                    <h3 style="color: #22c55e; font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">✅ Тест пройден!</h3>
-                                                    <p>Ваш результат: {{ $quizResult['score'] }}%</p>
-                                                @else
-                                                    <h3 style="color: #ef4444; font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">❌ Тест не пройден</h3>
-                                                    <p>Ваш результат: {{ $quizResult['score'] }}%. Попробуйте еще раз.</p>
-                                                    <button wire:click="retakeQuiz" style="color: white; background: linear-gradient(135deg, var(--primary-lesson), #7c3aed); padding: 12px 24px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 16px;">
-                                                        Пройти еще раз
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        @elseif ($quizInProgress)
-                                            <div>
-                                                @if ($questions->count() > 0)
-                                                    @php $currentQuestion = $questions[$currentQuestionIndex]; @endphp
-                                                    <div style="margin-bottom: 24px;">
-                                                        <p style="font-size: 1.125rem; font-weight: 600;">Вопрос {{ $currentQuestionIndex + 1 }} из {{ $questions->count() }}</p>
-                                                        <p>{{ $currentQuestion->question }}</p>
-                                                    </div>
-                                                    <div>
-                                                        @foreach ($currentQuestion->answers as $answer)
-                                                            <label style="display: block; padding: 16px; border: 1px solid var(--border-lesson); border-radius: 12px; margin-bottom: 12px; cursor: pointer; background: {{ isset($userAnswers[$currentQuestion->id]) && $userAnswers[$currentQuestion->id] == $answer->id ? 'rgba(99, 102, 241, 0.1)' : 'transparent' }};">
-                                                                <input type="radio" name="answer-{{ $currentQuestion->id }}" value="{{ $answer->id }}" wire:model.live="userAnswers.{{ $currentQuestion->id }}">
-                                                                {{ $answer->answer }}
-                                                            </label>
-                                                        @endforeach
-                                                    </div>
-                                                    <div style="display: flex; justify-content: space-between; margin-top: 24px;">
-                                                        <button wire:click="previousQuestion" @if($currentQuestionIndex === 0) disabled @endif style="padding: 12px 24px; border-radius: 12px; border: 1px solid var(--border-lesson); background: transparent; cursor: pointer;">
-                                                            Назад
-                                                        </button>
-                                                        @if ($currentQuestionIndex < $questions->count() - 1)
-                                                            <button wire:click="nextQuestion" style="padding: 12px 24px; border-radius: 12px; border: 1px solid var(--border-lesson); background: transparent; cursor: pointer;">
-                                                                Далее
-                                                            </button>
-                                                        @else
-                                                            <button wire:click="submitQuiz" style="color: white; background: linear-gradient(135deg, var(--primary-lesson), #7c3aed); padding: 12px 24px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer;">
-                                                                Завершить тест
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div style="text-align: center;">
-                                                <p style="margin-bottom: 16px;">{{ $quiz->description }}</p>
-                                                <button wire:click="startQuiz" style="color: white; background: linear-gradient(135deg, var(--primary-lesson), #7c3aed); padding: 12px 24px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer;">
-                                                    Начать тест
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endif
 
                                 {{-- Practice Section --}}
                                 @if ($practice && $practice->is_active)
@@ -239,27 +179,10 @@
 
                                 @if(!$isCompleted && !$justCompleted)
                                     <div style="text-align: center; margin-top: 40px;">
-                                        @php
-                                            $latestAttempt = $quiz ? App\Models\UserQuizAttempt::where('user_id', auth()->id())->where('quiz_id', $quiz->id)->latest()->first() : null;
-                                            $quizPassed = $latestAttempt && $latestAttempt->passed;
-                                            
-                                            $practicePassed = null;
-                                            $practiceBestScore = null;
-                                            if ($practice && $practice->is_active) {
-                                                $practicePassed = $practice->isPassedBy(auth()->user());
-                                                $bestPractice = $practice->submissions()->where('user_id', auth()->id())->where('passed', true)->orderByDesc('score')->first();
-                                                $practiceBestScore = $bestPractice?->score;
-                                            }
-                                        @endphp
-
-
-
-                                        @if(!$quiz || $quizPassed)
-                                            <button type="button" wire:click="complete" wire:loading.attr="disabled" class="finish-lesson-btn">
-                                                <span wire:loading.remove wire:target="complete">Завершить урок</span>
-                                                <span wire:loading wire:target="complete">Завершаем...</span>
-                                            </button>
-                                        @endif
+                                        <button type="button" wire:click="complete" wire:loading.attr="disabled" class="finish-lesson-btn">
+                                            <span wire:loading.remove wire:target="complete">Завершить урок</span>
+                                            <span wire:loading wire:target="complete">Завершаем...</span>
+                                        </button>
                                     </div>
                                 @endif
                             </div>

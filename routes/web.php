@@ -19,6 +19,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Student Routes
     Route::get('/courses', \App\Livewire\CourseIndex::class)->name('courses.index');
+    Route::get('/quizzes', \App\Livewire\Quizzes\Index::class)->name('quizzes.index');
+    Route::get('/quizzes/{quiz}', \App\Livewire\Quizzes\Show::class)->name('quizzes.show');
 
     // Teacher Routes
     Route::middleware(['role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
