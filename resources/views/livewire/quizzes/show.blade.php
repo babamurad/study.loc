@@ -1,14 +1,14 @@
-<div class="p-6 max-w-5xl mx-auto w-full pb-24">
+<div class="p-4 md:p-6 max-w-5xl mx-auto w-full pb-6">
     <!-- Header Section -->
-    <div class="mb-10 text-center relative z-10">
+    <div class="mb-4 md:mb-6 text-center relative z-10">
         <flux:button href="{{ route('quizzes.index') }}" variant="ghost" icon="chevron-left" class="absolute left-0 top-1/2 -translate-y-1/2 hidden md:inline-flex opacity-70 hover:opacity-100">
             Все тесты
         </flux:button>
-        <h1 class="text-4xl md:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-400 mb-4 drop-shadow-sm">
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-400 mb-2 drop-shadow-sm">
             {{ $quiz->title }}
         </h1>
         @if($quiz->description)
-            <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-base md:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                 {{ $quiz->description }}
             </p>
         @endif
@@ -22,7 +22,7 @@
         <div class="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative p-8 sm:p-12 z-10">
+        <div class="relative p-5 sm:p-8 z-10">
             @if ($quizResult)
                 <div class="text-center py-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
                     @if ($quizResult['passed'])
@@ -68,7 +68,7 @@
                         @endphp
                         
                         <!-- Progress Bar -->
-                        <div class="mb-10">
+                        <div class="mb-5">
                             <div class="flex justify-between items-end mb-3">
                                 <span class="text-sm font-bold text-zinc-500 dark:text-zinc-400 tracking-wider uppercase">Вопрос {{ $currentQuestionIndex + 1 }} из {{ $questions->count() }}</span>
                                 <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400">{{ round($progress) }}% завершено</span>
@@ -81,17 +81,17 @@
                         </div>
 
                         <!-- Question text -->
-                        <h2 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-8 leading-tight">
+                        <h2 class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white mb-5 leading-tight">
                             {{ $currentQuestion->question }}
                         </h2>
                         
                         <!-- Answers (Custom Premium Radio Cards) -->
-                        <div class="space-y-4 mb-12">
+                        <div class="space-y-2 mb-6">
                             @foreach ($currentQuestion->answers as $answer)
                                 @php
                                     $isSelected = isset($userAnswers[$currentQuestion->id]) && $userAnswers[$currentQuestion->id] == $answer->id;
                                 @endphp
-                                <label wire:click="selectAnswer({{ $currentQuestion->id }}, {{ $answer->id }})" class="group relative flex items-center p-5 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 {{ $isSelected ? 'bg-indigo-50/80 dark:bg-indigo-900/30 border-indigo-500 shadow-md shadow-indigo-500/10' : 'bg-white dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-lg' }} border-2">
+                                <label wire:click="selectAnswer({{ $currentQuestion->id }}, {{ $answer->id }})" class="group relative flex items-center p-3 sm:p-4 rounded-xl cursor-pointer transition-all duration-300 {{ $isSelected ? 'bg-indigo-50/80 dark:bg-indigo-900/30 border-indigo-500 shadow-md shadow-indigo-500/10' : 'bg-white dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-lg' }} border-2">
                                     
                                     <div class="flex-shrink-0 mr-4">
                                         <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors {{ $isSelected ? 'border-indigo-600 dark:border-indigo-400' : 'border-zinc-400 dark:border-zinc-500 group-hover:border-indigo-400' }}">
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
                                            
-                                    <span class="text-lg font-medium transition-colors {{ $isSelected ? 'text-indigo-900 dark:text-indigo-100' : 'text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white' }}">
+                                    <span class="text-base sm:text-lg font-medium transition-colors {{ $isSelected ? 'text-indigo-900 dark:text-indigo-100' : 'text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white' }}">
                                         {{ $answer->answer }}
                                     </span>
                                 </label>
@@ -107,7 +107,7 @@
                         </div>
 
                         <!-- Footer Navigation -->
-                        <div class="flex justify-between items-center pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                        <div class="flex justify-between items-center pt-4 border-t border-zinc-200 dark:border-zinc-800">
                             <button wire:click="previousQuestion" @if($currentQuestionIndex === 0) disabled @endif class="px-6 py-3 rounded-xl font-bold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                                 Назад
                             </button>
