@@ -7,7 +7,7 @@
                 <flux:subheading>История прохождения тестов и практических заданий</flux:subheading>
             </div>
         </div>
-        <flux:button href="{{ route('students.dashboard', $student) }}" wire:navigate variant="primary" icon="eye">
+        <flux:button href="{{ route('teacher.students.dashboard', $student) }}" wire:navigate variant="primary" icon="eye">
             Дашборд ученика
         </flux:button>
     </div>
