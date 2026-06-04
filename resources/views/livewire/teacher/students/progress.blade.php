@@ -12,12 +12,14 @@
         </flux:button>
     </div>
 
-    <flux:tabs>
-        <flux:tab name="quizzes" icon="document-text">Квизы (Тесты)</flux:tab>
-        <flux:tab name="practices" icon="code-bracket">Практические задания</flux:tab>
+    <div class="mt-8 mb-4">
+        <div class="flex items-center gap-2">
+            <flux:icon name="document-text" class="size-5 text-zinc-500" />
+            <flux:heading size="lg">Квизы (Тесты)</flux:heading>
+        </div>
+    </div>
 
-        <flux:tab.panel name="quizzes">
-            <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm mt-4">
+    <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm">
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
                         <tr>
@@ -57,11 +59,16 @@
                         @endforelse
                     </tbody>
                 </table>
-            </div>
-        </flux:tab.panel>
+    </div>
 
-        <flux:tab.panel name="practices">
-            <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm mt-4">
+    <div class="mt-12 mb-4">
+        <div class="flex items-center gap-2">
+            <flux:icon name="code-bracket" class="size-5 text-zinc-500" />
+            <flux:heading size="lg">Практические задания</flux:heading>
+        </div>
+    </div>
+
+    <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm">
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
                         <tr>
@@ -133,7 +140,5 @@
                         @endforelse
                     </tbody>
                 </table>
-            </div>
-        </flux:tab.panel>
-    </flux:tabs>
+    </div>
 </div>
