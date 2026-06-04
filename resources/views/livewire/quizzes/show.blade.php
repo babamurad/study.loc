@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                <flux:button wire:click="startQuiz" variant="primary" size="lg" class="w-full max-w-xs shadow-lg hover:shadow-xl transition-shadow">
+                <flux:button wire:click="startQuiz" variant="primary" class="w-full max-w-xs shadow-lg hover:shadow-xl transition-shadow py-3">
                     Начать тест
                 </flux:button>
             </div>
