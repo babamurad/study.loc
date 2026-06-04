@@ -7,7 +7,7 @@ namespace App\Livewire;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Practice;
-use App\Models\LessonQuiz;
+use App\Models\Quiz;
 use App\Models\PracticeSubmission;
 use App\Models\QuizQuestion;
 use App\Models\User;
@@ -28,7 +28,7 @@ class LessonShow extends Component
     public bool $justCompleted = false;
 
     // Quiz Properties
-    public ?LessonQuiz $quiz = null;
+    public ?Quiz $quiz = null;
     public Collection $questions;
     public array $userAnswers = [];
     public int $currentQuestionIndex = 0;
@@ -128,7 +128,7 @@ class LessonShow extends Component
 
         UserQuizAttempt::create([
             'user_id' => $user->id,
-            'lesson_quiz_id' => $this->quiz->id,
+            'quiz_id' => $this->quiz->id,
             'score' => $score,
             'passed' => $passed,
         ]);
@@ -153,7 +153,7 @@ class LessonShow extends Component
 
         if ($this->quiz) {
             $latestAttempt = UserQuizAttempt::where('user_id', $user->id)
-                ->where('lesson_quiz_id', $this->quiz->id)
+                ->where('quiz_id', $this->quiz->id)
                 ->latest()
                 ->first();
 
@@ -198,7 +198,7 @@ class LessonShow extends Component
 
         if ($this->quiz) {
             $quizPassed = UserQuizAttempt::where('user_id', $user->id)
-                ->where('lesson_quiz_id', $this->quiz->id)
+                ->where('quiz_id', $this->quiz->id)
                 ->where('passed', true)
                 ->exists();
             if (!$quizPassed) {

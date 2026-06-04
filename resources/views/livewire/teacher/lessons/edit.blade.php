@@ -47,6 +47,15 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:select wire:model="quiz_id" label="Тест (Опрос)" placeholder="Без теста">
+                        <flux:select.option value="">Без теста</flux:select.option>
+                        @foreach ($quizzes as $quiz)
+                            <flux:select.option value="{{ $quiz->id }}">{{ $quiz->title }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <flux:input wire:model.live="title" label="Заголовок" placeholder="Введите название урока" />
                     <flux:input wire:model="slug" label="Slug (URL)" placeholder="URL-адрес урока" />
                 </div>

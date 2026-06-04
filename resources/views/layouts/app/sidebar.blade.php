@@ -34,6 +34,9 @@
                         <flux:sidebar.item icon="book-open" :href="route('teacher.lessons.index')" :current="request()->routeIs('teacher.lessons.*')" wire:navigate>
                             Уроки
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="document-text" :href="route('teacher.quizzes.index')" :current="request()->routeIs('teacher.quizzes.*')" wire:navigate>
+                            Тесты
+                        </flux:sidebar.item>
                         <flux:sidebar.item icon="users" :href="route('teacher.students.index')" :current="request()->routeIs('teacher.students.*')" wire:navigate>
                             Ученики
                         </flux:sidebar.item>

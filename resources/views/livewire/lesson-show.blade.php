@@ -240,7 +240,7 @@
                                 @if(!$isCompleted && !$justCompleted)
                                     <div style="text-align: center; margin-top: 40px;">
                                         @php
-                                            $latestAttempt = $quiz ? App\Models\UserQuizAttempt::where('user_id', auth()->id())->where('lesson_quiz_id', $quiz->id)->latest()->first() : null;
+                                            $latestAttempt = $quiz ? App\Models\UserQuizAttempt::where('user_id', auth()->id())->where('quiz_id', $quiz->id)->latest()->first() : null;
                                             $quizPassed = $latestAttempt && $latestAttempt->passed;
                                             
                                             $practicePassed = null;

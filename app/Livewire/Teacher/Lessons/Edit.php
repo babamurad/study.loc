@@ -7,6 +7,7 @@ use App\Models\Lesson;
 use App\Models\Practice;
 use App\Models\Module;
 use App\Models\PracticeTestCase;
+use App\Models\Quiz;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -40,6 +41,9 @@ class Edit extends Component
     public bool $is_published = false;
 
     public ?int $insert_after_id = null;
+
+    #[Rule('nullable|exists:quizzes,id')]
+    public ?int $quiz_id = null;
 
     // Practice properties
     public ?Practice $practice = null;
@@ -80,6 +84,7 @@ class Edit extends Component
         $this->slug = $lesson->slug;
         $this->content = $lesson->content;
         $this->is_published = (bool) $lesson->is_published;
+        $this->quiz_id = $lesson->quiz_id;
 
         $prevLesson = $lesson->previousLesson();
         $this->insert_after_id = $prevLesson?->id ?? 0;
@@ -183,6 +188,7 @@ class Edit extends Component
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
+            'quiz_id' => $this->quiz_id,
             'position' => $this->calculatePosition(),
             'is_published' => $this->is_published,
         ]);
@@ -292,6 +298,7 @@ class Edit extends Component
         return view('livewire.teacher.lessons.edit', [
             'courses' => Course::all(),
             'modules' => $this->course_id ? Module::where('course_id', $this->course_id)->get() : collect(),
+            'quizzes' => Quiz::orderBy('title')->get(),
             'existingLessons' => $existingLessons,
         ]);
     }

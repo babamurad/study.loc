@@ -12,14 +12,14 @@ class QuizQuestion extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lesson_quiz_id',
+        'quiz_id',
         'question',
         'order',
     ];
 
-    public function lessonQuiz(): BelongsTo
+    public function quiz(): BelongsTo
     {
-        return $this->belongsTo(LessonQuiz::class);
+        return $this->belongsTo(Quiz::class);
     }
 
     public function answers(): HasMany

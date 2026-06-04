@@ -18,6 +18,7 @@ class Lesson extends Model
     protected $fillable = [
         'course_id',
         'module_id',
+        'quiz_id',
         'title',
         'slug',
         'content',
@@ -48,9 +49,9 @@ class Lesson extends Model
         return $this->hasMany(UserLessonProgress::class);
     }
 
-    public function quiz(): HasOne
+    public function quiz(): BelongsTo
     {
-        return $this->hasOne(LessonQuiz::class);
+        return $this->belongsTo(Quiz::class);
     }
 
     public function practice(): MorphOne

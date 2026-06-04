@@ -39,6 +39,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/lessons', \App\Livewire\Teacher\Lessons\Index::class)->name('lessons.index');
         Route::get('/lessons/create', \App\Livewire\Teacher\Lessons\Create::class)->name('lessons.create');
         Route::get('/lessons/{lesson}/edit', \App\Livewire\Teacher\Lessons\Edit::class)->name('lessons.edit');
+
+        // Quizzes
+        Route::get('/quizzes', \App\Livewire\Teacher\Quizzes\Index::class)->name('quizzes.index');
+        Route::get('/quizzes/create', \App\Livewire\Teacher\Quizzes\Create::class)->name('quizzes.create');
+        Route::get('/quizzes/{quiz}/edit', \App\Livewire\Teacher\Quizzes\Edit::class)->name('quizzes.edit');
     });
 });
 
