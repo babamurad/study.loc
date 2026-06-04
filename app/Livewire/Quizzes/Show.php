@@ -65,7 +65,9 @@ class Show extends Component
         foreach ($this->questions as $question) {
             $userAnswerId = $this->userAnswers[$question->id] ?? null;
             if ($userAnswerId) {
-                $isCorrect = $question->answers->where('id', $userAnswerId)->where('is_correct', true)->isNotEmpty();
+                // Collection's where() uses strict comparison by default.
+                // wire:model provides strings, so we must cast to (int) to match Eloquent IDs.
+                $isCorrect = $question->answers->where('id', (int) $userAnswerId)->where('is_correct', true)->isNotEmpty();
                 if ($isCorrect) {
                     $correctAnswers++;
                 }
