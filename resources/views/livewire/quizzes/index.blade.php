@@ -67,7 +67,7 @@
                         @endif
                     </div>
 
-                    <a href="{{ route('quizzes.show', $quiz) }}" class="w-full inline-flex justify-center items-center px-6 py-3.5 rounded-xl font-bold text-white transition-all duration-300 {{ $isPassed ? 'bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-lg shadow-zinc-500/20' : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-500/30' }}">
+                    <a href="{{ route('quizzes.show', $quiz) }}" class="w-full inline-flex justify-center items-center px-6 py-3.5 rounded-xl font-bold transition-all duration-300 {{ $isPassed ? 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 shadow-sm' : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-500/30' }}">
                         {{ $isPassed ? 'Пройти заново' : ($quizAttempts->isNotEmpty() ? 'Попробовать еще раз' : 'Начать тестирование') }}
                     </a>
                 </div>
