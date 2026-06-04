@@ -43,6 +43,11 @@ class Show extends Component
         $this->quizResult = null;
     }
 
+    public function selectAnswer($questionId, $answerId)
+    {
+        $this->userAnswers[$questionId] = $answerId;
+    }
+
     public function nextQuestion()
     {
         if ($this->currentQuestionIndex < $this->questions->count() - 1) {

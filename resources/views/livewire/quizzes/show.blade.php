@@ -91,19 +91,13 @@
                                 @php
                                     $isSelected = isset($userAnswers[$currentQuestion->id]) && $userAnswers[$currentQuestion->id] == $answer->id;
                                 @endphp
-                                <label class="group relative flex items-center p-5 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 {{ $isSelected ? 'bg-indigo-50/80 dark:bg-indigo-900/30 border-indigo-500 shadow-md shadow-indigo-500/10' : 'bg-white dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-lg' }} border-2">
+                                <label wire:click="selectAnswer({{ $currentQuestion->id }}, {{ $answer->id }})" class="group relative flex items-center p-5 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 {{ $isSelected ? 'bg-indigo-50/80 dark:bg-indigo-900/30 border-indigo-500 shadow-md shadow-indigo-500/10' : 'bg-white dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-lg' }} border-2">
                                     
                                     <div class="flex-shrink-0 mr-4">
                                         <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors {{ $isSelected ? 'border-indigo-600 dark:border-indigo-400' : 'border-zinc-400 dark:border-zinc-500 group-hover:border-indigo-400' }}">
                                             <div class="w-3 h-3 rounded-full bg-indigo-600 dark:bg-indigo-400 transition-transform duration-300 {{ $isSelected ? 'scale-100' : 'scale-0' }}"></div>
                                         </div>
                                     </div>
-                                    
-                                    <input type="radio" 
-                                           name="answer-{{ $currentQuestion->id }}" 
-                                           value="{{ $answer->id }}" 
-                                           wire:model.live="userAnswers.{{ $currentQuestion->id }}"
-                                           class="hidden">
                                            
                                     <span class="text-lg font-medium transition-colors {{ $isSelected ? 'text-indigo-900 dark:text-indigo-100' : 'text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white' }}">
                                         {{ $answer->answer }}
