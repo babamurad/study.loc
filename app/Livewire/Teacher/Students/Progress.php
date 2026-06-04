@@ -28,7 +28,7 @@ class Progress extends Component
             ->get();
 
         $practiceSubmissions = PracticeSubmission::where('user_id', $this->student->id)
-            ->with('practice.lesson.course')
+            ->with('practice.practicable')
             ->orderByDesc('created_at')
             ->get();
 

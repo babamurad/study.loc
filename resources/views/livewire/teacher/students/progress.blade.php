@@ -77,7 +77,13 @@
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="text-zinc-900 dark:text-white font-medium">{{ $submission->practice->title }}</div>
-                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $submission->practice->lesson->title ?? 'Без урока' }}</flux:text>
+                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">
+                                        @if($submission->practice->practicable)
+                                            {{ class_basename($submission->practice->practicable_type) }}: {{ $submission->practice->practicable->title }}
+                                        @else
+                                            Без привязки
+                                        @endif
+                                    </flux:text>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     #{{ $submission->attempt_no }}
