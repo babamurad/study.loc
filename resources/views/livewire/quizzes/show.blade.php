@@ -1,4 +1,4 @@
-<div class="p-6 max-w-4xl mx-auto">
+<div class="p-6 max-w-7xl mx-auto w-full">
     <div class="mb-6">
         <flux:button href="{{ route('quizzes.index') }}" variant="ghost" icon="chevron-left" class="mb-2">Все тесты</flux:button>
         <flux:heading size="xl" level="1">{{ $quiz->title }}</flux:heading>
@@ -47,17 +47,12 @@
 
                         <flux:heading size="lg" class="mb-6">{{ $currentQuestion->question }}</flux:heading>
                         
-                        <div class="space-y-3">
-                            @foreach ($currentQuestion->answers as $answer)
-                                <label class="flex items-center p-4 border rounded-xl cursor-pointer transition-colors {{ isset($userAnswers[$currentQuestion->id]) && $userAnswers[$currentQuestion->id] == $answer->id ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20' : 'border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800/50' }}">
-                                    <input type="radio" 
-                                           name="answer-{{ $currentQuestion->id }}" 
-                                           value="{{ $answer->id }}" 
-                                           wire:model.live="userAnswers.{{ $currentQuestion->id }}"
-                                           class="w-5 h-5 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <span class="ml-3 text-lg">{{ $answer->answer }}</span>
-                                </label>
-                            @endforeach
+                        <div class="space-y-4">
+                            <flux:radio.group wire:model.live="userAnswers.{{ $currentQuestion->id }}" class="flex flex-col gap-4">
+                                @foreach ($currentQuestion->answers as $answer)
+                                    <flux:radio value="{{ $answer->id }}" label="{{ $answer->answer }}" />
+                                @endforeach
+                            </flux:radio.group>
                         </div>
                     </div>
 
