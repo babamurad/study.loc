@@ -1,0 +1,133 @@
+<div class="p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-4">
+            <flux:button href="{{ route('teacher.students.index') }}" wire:navigate icon="arrow-left" variant="ghost" />
+            <div>
+                <flux:heading size="xl" level="1">Прогресс ученика: {{ $student->name }}</flux:heading>
+                <flux:subheading>История прохождения тестов и практических заданий</flux:subheading>
+            </div>
+        </div>
+        <flux:button href="{{ route('students.dashboard', $student) }}" wire:navigate variant="primary" icon="eye">
+            Дашборд ученика
+        </flux:button>
+    </div>
+
+    <flux:tabs>
+        <flux:tab name="quizzes" icon="document-text">Квизы (Тесты)</flux:tab>
+        <flux:tab name="practices" icon="code-bracket">Практические задания</flux:tab>
+
+        <flux:tab.panel name="quizzes">
+            <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm mt-4">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
+                        <tr>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">Тест / Курс</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-center">Оценка</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-center">Статус</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-right">Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                        @forelse ($quizAttempts as $attempt)
+                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="text-zinc-900 dark:text-white font-medium">{{ $attempt->quiz->title }}</div>
+                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $attempt->quiz->course->title }}</flux:text>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    {{ $attempt->score }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    @if ($attempt->passed)
+                                        <flux:badge color="green" size="sm">Сдан</flux:badge>
+                                    @else
+                                        <flux:badge color="red" size="sm">Не сдан</flux:badge>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-right text-sm text-zinc-500 dark:text-zinc-400">
+                                    {{ $attempt->created_at->format('d.m.Y H:i') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="px-6 py-12 text-center text-zinc-500">
+                                    Ученик еще не проходил квизы
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </flux:tab.panel>
+
+        <flux:tab.panel name="practices">
+            <div class="border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm mt-4">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
+                        <tr>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">Практика / Урок</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-center">Попытка</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-center">Статус проверки</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-center">Результат</th>
+                            <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-right">Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                        @forelse ($practiceSubmissions as $submission)
+                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="text-zinc-900 dark:text-white font-medium">{{ $submission->practice->title }}</div>
+                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $submission->practice->lesson->title ?? 'Без урока' }}</flux:text>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    #{{ $submission->attempt_no }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    @php
+                                        $statusColors = [
+                                            'pending' => 'zinc',
+                                            'running' => 'blue',
+                                            'completed' => 'green',
+                                            'failed' => 'red',
+                                            'timeout' => 'orange',
+                                        ];
+                                        $statusLabels = [
+                                            'pending' => 'Ожидает',
+                                            'running' => 'В процессе',
+                                            'completed' => 'Завершено',
+                                            'failed' => 'Ошибка',
+                                            'timeout' => 'Тайм-аут',
+                                        ];
+                                    @endphp
+                                    <flux:badge color="{{ $statusColors[$submission->status] ?? 'zinc' }}" size="sm">
+                                        {{ $statusLabels[$submission->status] ?? $submission->status }}
+                                    </flux:badge>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    @if ($submission->status === 'completed')
+                                        @if ($submission->passed)
+                                            <flux:badge color="green" size="sm">Пройдено</flux:badge>
+                                        @else
+                                            <flux:badge color="red" size="sm">Не пройдено</flux:badge>
+                                        @endif
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-right text-sm text-zinc-500 dark:text-zinc-400">
+                                    {{ $submission->created_at->format('d.m.Y H:i') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-12 text-center text-zinc-500">
+                                    Ученик еще не отправлял решения практических заданий
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </flux:tab.panel>
+    </flux:tabs>
+</div>

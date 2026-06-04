@@ -47,12 +47,21 @@
                                 <flux:text variant="subtle" size="xs" class="dark:text-zinc-500">{{ $studentCompleted }} из {{ $totalLessons }} уроков</flux:text>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right">
-                                <flux:button @click="activeStudent === {{ $student->id }} ? activeStudent = null : activeStudent = {{ $student->id }}" 
-                                             variant="ghost" 
-                                             size="sm"
-                                             icon="chevron-down">
-                                    Подробнее
-                                </flux:button>
+                                <div class="flex items-center justify-end gap-1">
+                                    <flux:dropdown>
+                                        <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="right" />
+                                        <flux:menu>
+                                            <flux:menu.item wire:navigate href="{{ route('teacher.students.dashboard', $student) }}" icon="eye">Дашборд ученика</flux:menu.item>
+                                            <flux:menu.item wire:navigate href="{{ route('teacher.students.progress', $student) }}" icon="chart-bar">История тестов и практик</flux:menu.item>
+                                        </flux:menu>
+                                    </flux:dropdown>
+                                    <flux:button @click="activeStudent === {{ $student->id }} ? activeStudent = null : activeStudent = {{ $student->id }}" 
+                                                 variant="ghost" 
+                                                 size="sm"
+                                                 icon="chevron-down">
+                                        Курсы
+                                    </flux:button>
+                                </div>
                             </td>
                         </tr>
                         <tr x-show="activeStudent === {{ $student->id }}" x-cloak class="bg-zinc-50/50 dark:bg-zinc-800/20">

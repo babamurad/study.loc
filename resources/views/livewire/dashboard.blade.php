@@ -4,6 +4,18 @@
         <flux:subheading>Здесь вы можете отслеживать свой прогресс и продолжать обучение.</flux:subheading>
     </div>
 
+    @if ($student)
+        <div class="mb-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 flex items-center gap-3 text-amber-800 dark:text-amber-200">
+            <flux:icon name="eye" class="size-5" />
+            <div>
+                <strong>Режим просмотра:</strong> Вы просматриваете дашборд от лица ученика {{ $student->name }}.
+            </div>
+            <flux:button href="{{ route('teacher.students.index') }}" wire:navigate size="sm" variant="subtle" class="ml-auto bg-amber-100 dark:bg-amber-900/50 hover:bg-amber-200 dark:hover:bg-amber-800/50">
+                Вернуться к списку
+            </flux:button>
+        </div>
+    @endif
+
     @if ($courseProgress->isEmpty())
         <div class="py-20 text-center">
             <flux:heading size="lg">Пока нет доступных курсов</flux:heading>

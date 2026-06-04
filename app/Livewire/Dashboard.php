@@ -14,9 +14,16 @@ use Livewire\Component;
 #[Layout('layouts.app')]
 class Dashboard extends Component
 {
-    public function mount()
+    public ?User $student = null;
+
+    public function mount(?User $student = null)
     {
-        if (Auth::user()->isTeacher()) {
+        if ($student && $student->id) {
+            if (!Auth::user()->isTeacher()) {
+                abort(403);
+            }
+            $this->student = $student;
+        } elseif (Auth::user()->isTeacher()) {
             return redirect()->route('teacher.dashboard');
         }
     }
@@ -24,7 +31,7 @@ class Dashboard extends Component
     public function render(LessonAccessService $accessService)
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = $this->student ?? Auth::user();
 
         $courses = Course::where('is_published', true)->get();
 

@@ -26,6 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
         Route::get('/dashboard', \App\Livewire\Teacher\Dashboard::class)->name('dashboard');
         Route::get('/students', \App\Livewire\Teacher\Students\Index::class)->name('students.index');
+        Route::get('/students/{student}/dashboard', \App\Livewire\Dashboard::class)->name('students.dashboard');
+        Route::get('/students/{student}/progress', \App\Livewire\Teacher\Students\Progress::class)->name('students.progress');
         
         // Courses
         Route::get('/courses', \App\Livewire\Teacher\Courses\Index::class)->name('courses.index');
