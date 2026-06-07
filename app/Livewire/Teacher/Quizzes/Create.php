@@ -19,7 +19,7 @@ class Create extends Component
     public int $pass_threshold = 70;
 
     #[Rule('nullable|integer|min:1')]
-    public ?int $time_limit = null;
+    public ?int $time_limit = 20;
 
     public function save()
     {
