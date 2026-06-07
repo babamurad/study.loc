@@ -86,7 +86,7 @@
                                                 <div class="bg-{{ $coursePercent === 100 ? 'green' : 'blue' }}-600 h-1.5 rounded-full" style="width: {{ $coursePercent }}%"></div>
                                             </div>
 
-                                            <div class="space-y-1 mt-auto pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                                            <div class="space-y-1 mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
                                                 @foreach ($course->lessons as $lesson)
                                                     @php
                                                         $isCompleted = $student->completedLessons->contains('id', $lesson->id);
