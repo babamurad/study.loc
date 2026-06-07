@@ -14,6 +14,7 @@ class Quiz extends Model
         'title',
         'description',
         'pass_threshold',
+        'time_limit',
     ];
 
     public function questions(): HasMany

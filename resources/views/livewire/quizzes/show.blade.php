@@ -60,7 +60,28 @@
                 </div>
 
             @elseif ($quizInProgress)
-                <div class="animate-in fade-in duration-500">
+                <div class="animate-in fade-in duration-500"
+                     x-data="{ 
+                        timeLeft: {{ $quiz->time_limit ?? 'null' }}, 
+                        timer: null,
+                        formatTime() {
+                            if (this.timeLeft === null) return '';
+                            let m = Math.floor(this.timeLeft / 60);
+                            let s = this.timeLeft % 60;
+                            return m + ':' + (s < 10 ? '0' : '') + s;
+                        },
+                        init() {
+                            if (this.timeLeft !== null) {
+                                this.timer = setInterval(() => {
+                                    this.timeLeft--;
+                                    if (this.timeLeft <= 0) {
+                                        clearInterval(this.timer);
+                                        $wire.submitQuiz();
+                                    }
+                                }, 1000);
+                            }
+                        }
+                     }">
                     @if ($questions->count() > 0)
                         @php 
                             $currentQuestion = $questions[$currentQuestionIndex]; 
@@ -71,7 +92,15 @@
                         <div class="mb-5">
                             <div class="flex justify-between items-end mb-3">
                                 <span class="text-sm font-bold text-zinc-500 dark:text-zinc-400 tracking-wider uppercase">Вопрос {{ $currentQuestionIndex + 1 }} из {{ $questions->count() }}</span>
-                                <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400">{{ round($progress) }}% завершено</span>
+                                <div class="flex gap-4 items-center">
+                                    <template x-if="timeLeft !== null">
+                                        <span class="text-sm font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1" :class="{'animate-pulse text-red-600': timeLeft <= 10}">
+                                            <flux:icon name="clock" class="size-4" />
+                                            <span x-text="formatTime()"></span>
+                                        </span>
+                                    </template>
+                                    <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400">{{ round($progress) }}% завершено</span>
+                                </div>
                             </div>
                             <div class="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-3 p-0.5 overflow-hidden border border-zinc-200/50 dark:border-zinc-700/50">
                                 <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 h-full rounded-full transition-all duration-700 ease-out relative" style="width: {{ $progress }}%">

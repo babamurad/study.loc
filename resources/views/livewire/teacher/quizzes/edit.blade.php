@@ -24,7 +24,10 @@
                 <div class="space-y-4">
                     <flux:input wire:model="title" label="Название теста" />
                     <flux:textarea wire:model="description" label="Описание" rows="3" />
-                    <flux:input type="number" wire:model="pass_threshold" label="Проходной балл (%)" min="0" max="100" />
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:input type="number" wire:model="pass_threshold" label="Проходной балл (%)" min="0" max="100" />
+                        <flux:input type="number" wire:model="time_limit" label="Лимит (сек)" min="1" placeholder="Без ограничений" />
+                    </div>
                 </div>
             </flux:card>
             

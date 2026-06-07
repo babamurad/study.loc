@@ -23,6 +23,9 @@ class Edit extends Component
     #[Rule('required|integer|min:0|max:100')]
     public int $pass_threshold = 70;
 
+    #[Rule('nullable|integer|min:1')]
+    public ?int $time_limit = null;
+
     public array $questions = [];
 
     public function mount(Quiz $quiz)
@@ -31,6 +34,7 @@ class Edit extends Component
         $this->title = $quiz->title;
         $this->description = $quiz->description ?? '';
         $this->pass_threshold = $quiz->pass_threshold;
+        $this->time_limit = $quiz->time_limit;
 
         foreach ($quiz->questions as $question) {
             $answers = [];
@@ -114,6 +118,7 @@ class Edit extends Component
             'title' => $this->title,
             'description' => $this->description,
             'pass_threshold' => $this->pass_threshold,
+            'time_limit' => $this->time_limit,
         ]);
 
         $existingQuestionIds = [];

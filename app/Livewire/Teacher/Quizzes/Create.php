@@ -18,6 +18,9 @@ class Create extends Component
     #[Rule('required|integer|min:0|max:100')]
     public int $pass_threshold = 70;
 
+    #[Rule('nullable|integer|min:1')]
+    public ?int $time_limit = null;
+
     public function save()
     {
         $this->validate();
@@ -26,6 +29,7 @@ class Create extends Component
             'title' => $this->title,
             'description' => $this->description,
             'pass_threshold' => $this->pass_threshold,
+            'time_limit' => $this->time_limit,
         ]);
 
         session()->flash('success', 'Тест успешно создан. Теперь вы можете добавить вопросы.');

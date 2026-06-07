@@ -11,9 +11,15 @@
                 <flux:input wire:model="title" label="Название теста" placeholder="Например: Итоговый тест по модулю 1" />
                 <flux:textarea wire:model="description" label="Описание теста (необязательно)" placeholder="Опишите, о чем этот тест..." rows="3" />
                 
-                <div class="w-1/3">
-                    <flux:input type="number" wire:model="pass_threshold" label="Проходной балл (%)" min="0" max="100" />
-                    <flux:subheading class="mt-1">Процент правильных ответов для успешного прохождения.</flux:subheading>
+                <div class="grid grid-cols-2 gap-4 w-2/3">
+                    <div>
+                        <flux:input type="number" wire:model="pass_threshold" label="Проходной балл (%)" min="0" max="100" />
+                        <flux:subheading class="mt-1">Процент правильных ответов для успешного прохождения.</flux:subheading>
+                    </div>
+                    <div>
+                        <flux:input type="number" wire:model="time_limit" label="Лимит времени (сек)" min="1" placeholder="Например: 20" />
+                        <flux:subheading class="mt-1">Оставьте пустым, если без ограничений.</flux:subheading>
+                    </div>
                 </div>
             </div>
 
