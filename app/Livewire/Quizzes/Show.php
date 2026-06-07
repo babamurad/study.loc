@@ -52,6 +52,7 @@ class Show extends Component
     {
         if ($this->currentQuestionIndex < $this->questions->count() - 1) {
             $this->currentQuestionIndex++;
+            $this->dispatch('reset-timer');
         }
     }
 
@@ -59,6 +60,17 @@ class Show extends Component
     {
         if ($this->currentQuestionIndex > 0) {
             $this->currentQuestionIndex--;
+            $this->dispatch('reset-timer');
+        }
+    }
+
+    public function handleTimeOut()
+    {
+        if ($this->currentQuestionIndex < $this->questions->count() - 1) {
+            $this->currentQuestionIndex++;
+            $this->dispatch('reset-timer');
+        } else {
+            $this->submitQuiz();
         }
     }
 

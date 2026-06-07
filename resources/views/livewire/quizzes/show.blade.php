@@ -62,6 +62,7 @@
             @elseif ($quizInProgress)
                 <div class="animate-in fade-in duration-500"
                      x-data="{ 
+                        timeLimit: {{ $quiz->time_limit ?? 'null' }},
                         timeLeft: {{ $quiz->time_limit ?? 'null' }}, 
                         timer: null,
                         formatTime() {
@@ -71,17 +72,29 @@
                             return m + ':' + (s < 10 ? '0' : '') + s;
                         },
                         init() {
-                            if (this.timeLeft !== null) {
-                                this.timer = setInterval(() => {
-                                    this.timeLeft--;
-                                    if (this.timeLeft <= 0) {
-                                        clearInterval(this.timer);
-                                        $wire.submitQuiz();
-                                    }
-                                }, 1000);
+                            if (this.timeLimit !== null) {
+                                this.startTimer();
+                            }
+                        },
+                        startTimer() {
+                            this.timeLeft = this.timeLimit;
+                            if (this.timer) clearInterval(this.timer);
+                            this.timer = setInterval(() => {
+                                this.timeLeft--;
+                                if (this.timeLeft <= 0) {
+                                    clearInterval(this.timer);
+                                    $wire.handleTimeOut();
+                                }
+                            }, 1000);
+                        },
+                        resetTimer() {
+                            if (this.timeLimit !== null) {
+                                this.startTimer();
                             }
                         }
-                     }">
+                     }"
+                     @reset-timer.window="resetTimer()"
+                >
                     @if ($questions->count() > 0)
                         @php 
                             $currentQuestion = $questions[$currentQuestionIndex]; 
