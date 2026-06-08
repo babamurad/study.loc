@@ -7,6 +7,7 @@ namespace App\Livewire\Teacher\Students;
 use App\Enums\UserRole;
 use App\Models\Course;
 use App\Models\User;
+use Flux\Flux;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
@@ -33,6 +34,29 @@ class Index extends Component
     public function updatedSearch(): void
     {
         $this->resetPage();
+    }
+
+    public function toggleActive(int $studentId): void
+    {
+        $student = User::where('role', UserRole::Student)->findOrFail($studentId);
+        $student->is_active = ! $student->is_active;
+        $student->save();
+
+        Flux::toast(
+            variant: 'success',
+            text: $student->is_active ? 'Ученик успешно активирован.' : 'Ученик успешно деактивирован.'
+        );
+    }
+
+    public function deleteStudent(int $studentId): void
+    {
+        $student = User::where('role', UserRole::Student)->findOrFail($studentId);
+        $student->delete();
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Ученик успешно удален.'
+        );
     }
 
     public function render(): View

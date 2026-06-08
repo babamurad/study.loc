@@ -14,7 +14,7 @@ Route::get('/debug-session', function () {
         'cookie_secure' => config('session.secure'),
     ];
 });
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
 
     // Student Routes

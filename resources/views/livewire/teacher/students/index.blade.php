@@ -16,6 +16,7 @@
                 <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
                         <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">Имя / Email</th>
+                        <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">Статус</th>
                         <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">Общий прогресс</th>
                         <th class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 text-right">Действия</th>
                     </tr>
@@ -27,7 +28,7 @@
                             $studentCompleted = $student->completedLessons->count();
                             $totalPercent = $totalLessons > 0 ? round(($studentCompleted / $totalLessons) * 100) : 0;
                         @endphp
-                        <tr class="group hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                        <tr wire:key="student-{{ $student->id }}" class="group hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors {{ ! $student->is_active ? 'opacity-60 bg-zinc-50/30 dark:bg-zinc-900/30' : '' }}">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-3">
                                     <flux:avatar :name="$student->name" :initials="$student->initials()" size="sm" />
@@ -36,6 +37,12 @@
                                         <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $student->email }}</flux:text>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <flux:switch 
+                                    wire:click="toggleActive({{ $student->id }})" 
+                                    :checked="(bool) $student->is_active" 
+                                />
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center gap-2 w-48">
@@ -53,6 +60,15 @@
                                         <flux:menu>
                                             <flux:menu.item wire:navigate href="{{ route('teacher.students.dashboard', $student) }}" icon="eye">Дашборд ученика</flux:menu.item>
                                             <flux:menu.item wire:navigate href="{{ route('teacher.students.progress', $student) }}" icon="chart-bar">История тестов и практик</flux:menu.item>
+                                            <flux:menu.separator />
+                                            <flux:menu.item 
+                                                wire:click="deleteStudent({{ $student->id }})" 
+                                                wire:confirm="Вы уверены, что хотите удалить этого ученика? Это действие необратимо и удалит весь его прогресс."
+                                                variant="danger" 
+                                                icon="trash"
+                                            >
+                                                Удалить ученика
+                                            </flux:menu.item>
                                         </flux:menu>
                                     </flux:dropdown>
                                     <flux:button @click="activeStudent === {{ $student->id }} ? activeStudent = null : activeStudent = {{ $student->id }}" 
@@ -64,8 +80,8 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr x-show="activeStudent === {{ $student->id }}" x-cloak class="bg-zinc-50/50 dark:bg-zinc-800/20">
-                            <td colspan="3" class="px-6 py-4">
+                        <tr wire:key="student-courses-{{ $student->id }}" x-show="activeStudent === {{ $student->id }}" x-cloak class="bg-zinc-50/50 dark:bg-zinc-800/20">
+                            <td colspan="4" class="px-6 py-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2">
                                     @foreach ($courses as $course)
                                         @php
@@ -112,7 +128,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-6 py-12 text-center">
+                            <td colspan="4" class="px-6 py-12 text-center">
                                 <flux:text variant="subtle">Студенты не найдены</flux:text>
                             </td>
                         </tr>
