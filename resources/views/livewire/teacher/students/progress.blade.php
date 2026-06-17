@@ -47,8 +47,11 @@
                         @forelse ($quizAttempts as $attempt)
                             @php
                                 $isPassed = $attempt->passed;
+                                $bgClass = $isPassed 
+                                    ? 'bg-emerald-50/50 dark:bg-emerald-900/10 hover:bg-emerald-100 dark:hover:bg-emerald-900/30' 
+                                    : 'bg-red-50/30 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/30';
                             @endphp
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors {{ $isPassed ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-red-50/30 dark:bg-red-900/10' }}">
+                            <tr class="transition-colors {{ $bgClass }}">
                                 <td class="px-6 py-4">
                                     <div class="text-zinc-900 dark:text-white font-medium">{{ $attempt->quiz?->title ?? 'Удаленный тест' }}</div>
                                     <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $attempt->quiz?->course?->title ?? 'Без курса' }}</flux:text>
@@ -115,8 +118,15 @@
                                 $isCompleted = $submission->status === 'completed';
                                 $isPassed = $isCompleted && $submission->passed;
                                 $isFailed = $submission->status === 'failed' || ($isCompleted && !$submission->passed);
+                                
+                                $bgClass = 'hover:bg-zinc-100 dark:hover:bg-zinc-800/50';
+                                if ($isPassed) {
+                                    $bgClass = 'bg-emerald-50/50 dark:bg-emerald-900/10 hover:bg-emerald-100 dark:hover:bg-emerald-900/30';
+                                } elseif ($isFailed) {
+                                    $bgClass = 'bg-red-50/30 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/30';
+                                }
                             @endphp
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors {{ $isPassed ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : ($isFailed ? 'bg-red-50/30 dark:bg-red-900/10' : '') }}">
+                            <tr class="transition-colors {{ $bgClass }}">
                                 <td class="px-6 py-4">
                                     <div class="text-zinc-900 dark:text-white font-medium">{{ $submission->practice->title }}</div>
                                     <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">
