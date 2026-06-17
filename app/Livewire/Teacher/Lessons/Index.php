@@ -26,6 +26,12 @@ class Index extends Component
     #[Url]
     public string $search = '';
 
+    #[Url]
+    public string $sortField = 'created_at';
+
+    #[Url]
+    public string $sortDirection = 'desc';
+
     protected function queryString(): array
     {
         return [
@@ -55,9 +61,19 @@ class Index extends Component
         session()->flash('success', 'Урок успешно удален.');
     }
 
+    public function sortBy(string $field): void
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+    }
+
     public function render()
     {
-        $query = Lesson::with(['course', 'module'])->orderBy('created_at', 'desc');
+        $query = Lesson::with(['course', 'module'])->orderBy($this->sortField, $this->sortDirection);
 
         if ($this->course_id) {
             $query->where('course_id', $this->course_id);
