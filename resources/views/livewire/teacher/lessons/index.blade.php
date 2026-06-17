@@ -42,53 +42,53 @@
             <table class="w-full text-left border-collapse">
                 <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
-                        <th wire:click="sortBy('title')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors">
+                        <th wire:click="sortBy('title')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th">
                             <div class="flex items-center gap-1">
                                 Название
                                 @if($sortField === 'title')
                                     <flux:icon name="chevron-{{ $sortDirection === 'asc' ? 'up' : 'down' }}" class="size-4" />
                                 @else
-                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50" />
+                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50 transition-opacity" />
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('course_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden sm:table-cell cursor-pointer select-none group/th hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors">
+                        <th wire:click="sortBy('course_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden sm:table-cell cursor-pointer select-none group/th">
                             <div class="flex items-center gap-1">
                                 Курс
                                 @if($sortField === 'course_id')
                                     <flux:icon name="chevron-{{ $sortDirection === 'asc' ? 'up' : 'down' }}" class="size-4" />
                                 @else
-                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50" />
+                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50 transition-opacity" />
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('module_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden lg:table-cell cursor-pointer select-none group/th hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors">
+                        <th wire:click="sortBy('module_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden lg:table-cell cursor-pointer select-none group/th">
                             <div class="flex items-center gap-1">
                                 Модуль
                                 @if($sortField === 'module_id')
                                     <flux:icon name="chevron-{{ $sortDirection === 'asc' ? 'up' : 'down' }}" class="size-4" />
                                 @else
-                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50" />
+                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50 transition-opacity" />
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('position')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors">
+                        <th wire:click="sortBy('position')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th">
                             <div class="flex items-center gap-1">
                                 Поз.
                                 @if($sortField === 'position')
                                     <flux:icon name="chevron-{{ $sortDirection === 'asc' ? 'up' : 'down' }}" class="size-4" />
                                 @else
-                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50" />
+                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50 transition-opacity" />
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('is_published')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors">
+                        <th wire:click="sortBy('is_published')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th">
                             <div class="flex items-center gap-1">
                                 Статус
                                 @if($sortField === 'is_published')
                                     <flux:icon name="chevron-{{ $sortDirection === 'asc' ? 'up' : 'down' }}" class="size-4" />
                                 @else
-                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50" />
+                                    <flux:icon name="chevron-up-down" class="size-4 opacity-0 group-hover/th:opacity-50 transition-opacity" />
                                 @endif
                             </div>
                         </th>
