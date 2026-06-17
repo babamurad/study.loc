@@ -42,7 +42,7 @@
             <table class="w-full text-left border-collapse">
                 <thead class="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
-                        <th wire:click="sortBy('title')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th">
+                        <th wire:click="sortBy('title')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th hover:bg-black/5 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             <div class="flex items-center gap-1">
                                 Название
                                 @if($sortField === 'title')
@@ -52,7 +52,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('course_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden sm:table-cell cursor-pointer select-none group/th">
+                        <th wire:click="sortBy('course_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden sm:table-cell cursor-pointer select-none group/th hover:bg-black/5 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             <div class="flex items-center gap-1">
                                 Курс
                                 @if($sortField === 'course_id')
@@ -62,7 +62,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('module_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden lg:table-cell cursor-pointer select-none group/th">
+                        <th wire:click="sortBy('module_id')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 hidden lg:table-cell cursor-pointer select-none group/th hover:bg-black/5 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             <div class="flex items-center gap-1">
                                 Модуль
                                 @if($sortField === 'module_id')
@@ -72,7 +72,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('position')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th">
+                        <th wire:click="sortBy('position')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th hover:bg-black/5 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             <div class="flex items-center gap-1">
                                 Поз.
                                 @if($sortField === 'position')
@@ -82,7 +82,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th wire:click="sortBy('is_published')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th">
+                        <th wire:click="sortBy('is_published')" class="px-6 py-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200 cursor-pointer select-none group/th hover:bg-black/5 dark:hover:bg-white/5 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             <div class="flex items-center gap-1">
                                 Статус
                                 @if($sortField === 'is_published')
