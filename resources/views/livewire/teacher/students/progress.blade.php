@@ -33,8 +33,8 @@
                         @forelse ($quizAttempts as $attempt)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
                                 <td class="px-6 py-4">
-                                    <div class="text-zinc-900 dark:text-white font-medium">{{ $attempt->quiz->title }}</div>
-                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $attempt->quiz->course->title }}</flux:text>
+                                    <div class="text-zinc-900 dark:text-white font-medium">{{ $attempt->quiz?->title ?? 'Удаленный тест' }}</div>
+                                    <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $attempt->quiz?->course?->title ?? 'Без курса' }}</flux:text>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     {{ $attempt->score }}
