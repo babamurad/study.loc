@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\LessonQuiz;
+use App\Models\Quiz;
 use App\Models\QuizQuestion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +19,7 @@ class QuizQuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'lesson_quiz_id' => LessonQuiz::factory(),
+            'quiz_id' => Quiz::factory(),
             'question' => $this->faker->sentence . '?',
             'order' => 0,
         ];

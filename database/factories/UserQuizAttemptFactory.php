@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\LessonQuiz;
+use App\Models\Quiz;
 use App\Models\User;
 use App\Models\UserQuizAttempt;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,7 +21,7 @@ class UserQuizAttemptFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'lesson_quiz_id' => LessonQuiz::factory(),
+            'quiz_id' => Quiz::factory(),
             'score' => $this->faker->numberBetween(0, 100),
             'passed' => $this->faker->boolean,
         ];

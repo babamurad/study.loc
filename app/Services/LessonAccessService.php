@@ -47,7 +47,7 @@ final readonly class LessonAccessService
         if ($quiz) {
             return UserQuizAttempt::query()
                 ->where('user_id', $user->id)
-                ->where('lesson_quiz_id', $quiz->id)
+                ->where('quiz_id', $quiz->id)
                 ->where('passed', true)
                 ->exists();
         }
@@ -120,7 +120,7 @@ final readonly class LessonAccessService
         if ($quiz) {
             $passedQuiz = UserQuizAttempt::query()
                 ->where('user_id', $user->id)
-                ->where('lesson_quiz_id', $quiz->id)
+                ->where('quiz_id', $quiz->id)
                 ->where('passed', true)
                 ->exists();
 

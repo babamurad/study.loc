@@ -3,7 +3,7 @@
 use App\Livewire\LessonShow;
 use App\Models\Course;
 use App\Models\Lesson;
-use App\Models\LessonQuiz;
+use App\Models\Quiz;
 use App\Models\QuizAnswer;
 use App\Models\QuizQuestion;
 use App\Models\User;
@@ -21,8 +21,9 @@ beforeEach(function () {
     $this->course = Course::factory()->create();
     $this->lesson1 = Lesson::factory()->create(['course_id' => $this->course->id, 'position' => 1]);
     $this->lesson2 = Lesson::factory()->create(['course_id' => $this->course->id, 'position' => 2]);
-    $this->quiz = LessonQuiz::factory()->create(['lesson_id' => $this->lesson1->id]);
-    $question = QuizQuestion::factory()->create(['lesson_quiz_id' => $this->quiz->id]);
+    $this->quiz = Quiz::factory()->create();
+    $this->lesson1->update(['quiz_id' => $this->quiz->id]);
+    $question = QuizQuestion::factory()->create(['quiz_id' => $this->quiz->id]);
     QuizAnswer::factory()->create(['quiz_question_id' => $question->id, 'is_correct' => true]);
     QuizAnswer::factory()->create(['quiz_question_id' => $question->id, 'is_correct' => false]);
 
@@ -49,7 +50,7 @@ test('user can access next lesson after passing quiz', function () {
 
     UserQuizAttempt::factory()->create([
         'user_id' => $this->user->id,
-        'lesson_quiz_id' => $this->quiz->id,
+        'quiz_id' => $this->quiz->id,
         'passed' => true,
     ]);
 
@@ -58,7 +59,7 @@ test('user can access next lesson after passing quiz', function () {
 });
 
 test('user can complete lesson by passing quiz', function () {
-    Livewire::test(LessonShow::class, ['course' => $this->course, 'lesson' => $this->lesson1])
+    Livewire::test(\App\Livewire\Quizzes\Show::class, ['quiz' => $this->quiz])
         ->call('startQuiz')
         ->set('userAnswers.'.$this->quiz->questions->first()->id, $this->quiz->questions->first()->answers->where('is_correct', true)->first()->id)
         ->call('submitQuiz')
@@ -66,9 +67,13 @@ test('user can complete lesson by passing quiz', function () {
         
     assertDatabaseHas('user_quiz_attempts', [
         'user_id' => $this->user->id,
-        'lesson_quiz_id' => $this->quiz->id,
+        'quiz_id' => $this->quiz->id,
         'passed' => true,
     ]);
+
+    Livewire::test(LessonShow::class, ['course' => $this->course, 'lesson' => $this->lesson1])
+        ->call('complete')
+        ->assertHasNoErrors();
 
     assertDatabaseHas('user_lesson_progress', [
         'user_id' => $this->user->id,
@@ -78,7 +83,7 @@ test('user can complete lesson by passing quiz', function () {
 });
 
 test('user cannot complete lesson by failing quiz', function () {
-    Livewire::test(LessonShow::class, ['course' => $this->course, 'lesson' => $this->lesson1])
+    Livewire::test(\App\Livewire\Quizzes\Show::class, ['quiz' => $this->quiz])
         ->call('startQuiz')
         ->set('userAnswers.'.$this->quiz->questions->first()->id, $this->quiz->questions->first()->answers->where('is_correct', false)->first()->id)
         ->call('submitQuiz')
@@ -86,9 +91,13 @@ test('user cannot complete lesson by failing quiz', function () {
 
     assertDatabaseHas('user_quiz_attempts', [
         'user_id' => $this->user->id,
-        'lesson_quiz_id' => $this->quiz->id,
+        'quiz_id' => $this->quiz->id,
         'passed' => false,
     ]);
+
+    Livewire::test(LessonShow::class, ['course' => $this->course, 'lesson' => $this->lesson1])
+        ->call('complete')
+        ->assertHasNoErrors();
 
     assertDatabaseMissing('user_lesson_progress', [
         'user_id' => $this->user->id,
