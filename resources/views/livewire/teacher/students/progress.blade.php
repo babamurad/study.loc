@@ -13,9 +13,23 @@
     </div>
 
     <div class="mt-8 mb-4">
-        <div class="flex items-center gap-2">
-            <flux:icon name="document-text" class="size-5 text-zinc-500" />
-            <flux:heading size="lg">Квизы (Тесты)</flux:heading>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <flux:icon name="document-text" class="size-5 text-zinc-500" />
+                <flux:heading size="lg">Квизы (Тесты)</flux:heading>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                <flux:radio.group wire:model.live="quizFilter" variant="segmented" class="max-w-full overflow-x-auto">
+                    <flux:radio value="all" label="Все" />
+                    <flux:radio value="passed" label="Сданы" />
+                    <flux:radio value="failed" label="Не сданы" />
+                </flux:radio.group>
+                <flux:select wire:model.live="quizSort" class="w-full sm:w-auto min-w-40">
+                    <option value="date_desc">Сначала новые</option>
+                    <option value="date_asc">Сначала старые</option>
+                    <option value="score_desc">По убыванию баллов</option>
+                </flux:select>
+            </div>
         </div>
     </div>
 
@@ -31,7 +45,10 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                         @forelse ($quizAttempts as $attempt)
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                            @php
+                                $isPassed = $attempt->passed;
+                            @endphp
+                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors {{ $isPassed ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-red-50/30 dark:bg-red-900/10' }}">
                                 <td class="px-6 py-4">
                                     <div class="text-zinc-900 dark:text-white font-medium">{{ $attempt->quiz?->title ?? 'Удаленный тест' }}</div>
                                     <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">{{ $attempt->quiz?->course?->title ?? 'Без курса' }}</flux:text>
@@ -62,9 +79,22 @@
     </div>
 
     <div class="mt-12 mb-4">
-        <div class="flex items-center gap-2">
-            <flux:icon name="code-bracket" class="size-5 text-zinc-500" />
-            <flux:heading size="lg">Практические задания</flux:heading>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <flux:icon name="code-bracket" class="size-5 text-zinc-500" />
+                <flux:heading size="lg">Практические задания</flux:heading>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                <flux:radio.group wire:model.live="practiceFilter" variant="segmented" class="max-w-full overflow-x-auto">
+                    <flux:radio value="all" label="Все" />
+                    <flux:radio value="passed" label="Сданы" />
+                    <flux:radio value="failed" label="Не сданы" />
+                </flux:radio.group>
+                <flux:select wire:model.live="practiceSort" class="w-full sm:w-auto min-w-40">
+                    <option value="date_desc">Сначала новые</option>
+                    <option value="date_asc">Сначала старые</option>
+                </flux:select>
+            </div>
         </div>
     </div>
 
@@ -81,7 +111,12 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                         @forelse ($practiceSubmissions as $submission)
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                            @php
+                                $isCompleted = $submission->status === 'completed';
+                                $isPassed = $isCompleted && $submission->passed;
+                                $isFailed = $submission->status === 'failed' || ($isCompleted && !$submission->passed);
+                            @endphp
+                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors {{ $isPassed ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : ($isFailed ? 'bg-red-50/30 dark:bg-red-900/10' : '') }}">
                                 <td class="px-6 py-4">
                                     <div class="text-zinc-900 dark:text-white font-medium">{{ $submission->practice->title }}</div>
                                     <flux:text variant="subtle" size="sm" class="dark:text-zinc-400">
