@@ -16,15 +16,15 @@
         </div>
     @endif
 
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <flux:radio.group wire:model.live="statusFilter" variant="segmented" class="max-w-full overflow-x-auto">
-            <flux:radio value="all" label="Все" />
-            <flux:radio value="in_progress" label="В процессе" />
-            <flux:radio value="not_started" label="Не начатые" />
-            <flux:radio value="completed" label="Завершенные" />
-        </flux:radio.group>
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <flux:select wire:model.live="statusFilter" class="w-full sm:w-auto min-w-40">
+            <option value="all">Все статусы</option>
+            <option value="in_progress">В процессе</option>
+            <option value="not_started">Не начатые</option>
+            <option value="completed">Завершенные</option>
+        </flux:select>
 
-        <flux:select wire:model.live="sortOrder" class="w-full sm:w-64">
+        <flux:select wire:model.live="sortOrder" class="w-full sm:w-auto">
             <option value="progress_desc">По убыванию прогресса</option>
             <option value="progress_asc">По возрастанию прогресса</option>
             <option value="title_asc">По названию (А-Я)</option>
@@ -48,7 +48,7 @@
                     $isNotStarted = $item['percentage'] === 0;
                 @endphp
                 
-                <flux:card class="flex flex-col h-full hover:shadow-lg transition-all duration-300 {{ $isCompleted ? 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50' : '' }}">
+                <flux:card class="flex flex-col h-full hover:shadow-lg transition-all duration-300 {{ $isCompleted ? 'bg-emerald-50/10 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50' : '' }}">
                     <div class="flex-1">
                         <div class="flex items-start justify-between mb-2">
                             <flux:heading size="lg" class="{{ $isCompleted ? 'text-emerald-900 dark:text-emerald-100' : '' }}">
@@ -67,8 +67,9 @@
                         
                         <div class="mt-4">
                             @if ($isNotStarted)
-                                <div class="py-3 text-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm text-neutral-600 dark:text-neutral-400">
-                                    Курс состоит из {{ $item['total_lessons'] }} уроков
+                                <div class="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400 mt-6">
+                                    <flux:icon name="document-text" class="size-4" />
+                                    <span>Курс состоит из {{ $item['total_lessons'] }} уроков</span>
                                 </div>
                             @else
                                 <div class="flex justify-between text-sm mb-1">

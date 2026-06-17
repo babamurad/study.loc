@@ -19,11 +19,11 @@
                 <flux:heading size="lg">Квизы (Тесты)</flux:heading>
             </div>
             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                <flux:radio.group wire:model.live="quizFilter" variant="segmented" class="max-w-full overflow-x-auto">
-                    <flux:radio value="all" label="Все" />
-                    <flux:radio value="passed" label="Сданы" />
-                    <flux:radio value="failed" label="Не сданы" />
-                </flux:radio.group>
+                <flux:select wire:model.live="quizFilter" class="w-full sm:w-auto min-w-40">
+                    <option value="all">Все статусы</option>
+                    <option value="passed">Сданы</option>
+                    <option value="failed">Не сданы</option>
+                </flux:select>
                 <flux:select wire:model.live="quizSort" class="w-full sm:w-auto min-w-40">
                     <option value="date_desc">Сначала новые</option>
                     <option value="date_asc">Сначала старые</option>
@@ -85,11 +85,11 @@
                 <flux:heading size="lg">Практические задания</flux:heading>
             </div>
             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                <flux:radio.group wire:model.live="practiceFilter" variant="segmented" class="max-w-full overflow-x-auto">
-                    <flux:radio value="all" label="Все" />
-                    <flux:radio value="passed" label="Сданы" />
-                    <flux:radio value="failed" label="Не сданы" />
-                </flux:radio.group>
+                <flux:select wire:model.live="practiceFilter" class="w-full sm:w-auto min-w-40">
+                    <option value="all">Все статусы</option>
+                    <option value="passed">Сданы</option>
+                    <option value="failed">Не сданы</option>
+                </flux:select>
                 <flux:select wire:model.live="practiceSort" class="w-full sm:w-auto min-w-40">
                     <option value="date_desc">Сначала новые</option>
                     <option value="date_asc">Сначала старые</option>
