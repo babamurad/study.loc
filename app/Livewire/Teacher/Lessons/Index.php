@@ -9,28 +9,43 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Session;
 
 #[Layout('layouts.app')]
 class Index extends Component
 {
     use WithPagination;
 
+    #[Session]
     public int $perPage = 10;
 
     #[Url]
+    #[Session]
     public ?int $course_id = null;
 
     #[Url]
+    #[Session]
     public ?int $module_id = null;
 
     #[Url]
+    #[Session]
     public string $search = '';
 
     #[Url]
+    #[Session]
     public string $sortField = 'created_at';
 
     #[Url]
+    #[Session]
     public string $sortDirection = 'desc';
+
+    #[Session]
+    public array $selectedColumns = [
+        'course_id' => true,
+        'module_id' => true,
+        'position' => true,
+        'is_published' => true,
+    ];
 
     protected function queryString(): array
     {
