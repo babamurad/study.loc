@@ -16,49 +16,83 @@
         </div>
     @endif
 
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <flux:radio.group wire:model.live="statusFilter" variant="segmented" class="max-w-full overflow-x-auto">
+            <flux:radio value="all" label="Все" />
+            <flux:radio value="in_progress" label="В процессе" />
+            <flux:radio value="not_started" label="Не начатые" />
+            <flux:radio value="completed" label="Завершенные" />
+        </flux:radio.group>
+
+        <flux:select wire:model.live="sortOrder" class="w-full sm:w-64">
+            <option value="progress_desc">По убыванию прогресса</option>
+            <option value="progress_asc">По возрастанию прогресса</option>
+            <option value="title_asc">По названию (А-Я)</option>
+            <option value="title_desc">По названию (Я-А)</option>
+        </flux:select>
+    </div>
+
     @if ($courseProgress->isEmpty())
-        <div class="py-20 text-center">
-            <flux:heading size="lg">Пока нет доступных курсов</flux:heading>
-            <flux:subheading class="mb-6">Скоро здесь появятся новые учебные материалы.</flux:subheading>
+        <div class="py-20 text-center bg-neutral-50 dark:bg-neutral-800/50 rounded-xl border border-neutral-200 dark:border-neutral-800">
+            <flux:heading size="lg">Курсы не найдены</flux:heading>
+            <flux:subheading class="mb-6 mt-2">Попробуйте изменить параметры фильтрации.</flux:subheading>
+            @if($statusFilter !== 'all')
+                <flux:button wire:click="$set('statusFilter', 'all')" variant="outline" size="sm">Сбросить фильтр</flux:button>
+            @endif
         </div>
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach ($courseProgress as $item)
-                <flux:card class="flex flex-col h-full hover:shadow-lg transition-shadow duration-300">
+                @php
+                    $isCompleted = $item['percentage'] === 100;
+                    $isNotStarted = $item['percentage'] === 0;
+                @endphp
+                
+                <flux:card class="flex flex-col h-full hover:shadow-lg transition-all duration-300 {{ $isCompleted ? 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200/50 dark:border-emerald-800/50' : '' }}">
                     <div class="flex-1">
                         <div class="flex items-start justify-between mb-2">
-                            <flux:heading size="lg">{{ $item['course']->title }}</flux:heading>
-                            @if ($item['percentage'] === 100)
-                                <flux:badge color="success" class="shrink-0">Завершен</flux:badge>
+                            <flux:heading size="lg" class="{{ $isCompleted ? 'text-emerald-900 dark:text-emerald-100' : '' }}">
+                                {{ $item['course']->title }}
+                            </flux:heading>
+                            @if ($isCompleted)
+                                <flux:badge color="success" class="shrink-0 ml-2">Завершен</flux:badge>
+                            @elseif ($isNotStarted)
+                                <flux:badge class="shrink-0 ml-2">Новый</flux:badge>
                             @endif
                         </div>
                         
-                        <p class="text-neutral-500 text-sm line-clamp-2 mb-6">
+                        <p class="text-sm line-clamp-2 mb-6 {{ $isCompleted ? 'text-emerald-700/80 dark:text-emerald-300/80' : 'text-neutral-500' }}">
                             {{ $item['course']->description ?? 'Описание курса временно отсутствует.' }}
                         </p>
                         
                         <div class="mt-4">
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-neutral-600 dark:text-neutral-400">Прогресс</span>
-                                <span class="font-medium">{{ $item['percentage'] }}%</span>
-                            </div>
-                            <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2.5 mb-2">
-                                <div class="bg-indigo-600 dark:bg-indigo-500 h-2.5 rounded-full" style="width: {{ $item['percentage'] }}%"></div>
-                            </div>
-                            <p class="text-xs text-neutral-500 dark:text-neutral-400">
-                                Пройдено {{ $item['completed_lessons'] }} из {{ $item['total_lessons'] }} уроков
-                            </p>
+                            @if ($isNotStarted)
+                                <div class="py-3 text-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm text-neutral-600 dark:text-neutral-400">
+                                    Курс состоит из {{ $item['total_lessons'] }} уроков
+                                </div>
+                            @else
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="{{ $isCompleted ? 'text-emerald-700 dark:text-emerald-400' : 'text-neutral-600 dark:text-neutral-400' }}">Прогресс</span>
+                                    <span class="font-medium {{ $isCompleted ? 'text-emerald-800 dark:text-emerald-300' : '' }}">{{ $item['percentage'] }}%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2.5 mb-2 overflow-hidden">
+                                    <div class="h-2.5 rounded-full transition-all duration-500 {{ $isCompleted ? 'bg-emerald-500 dark:bg-emerald-400' : 'bg-indigo-600 dark:bg-indigo-500' }}" style="width: {{ $item['percentage'] }}%"></div>
+                                </div>
+                                <p class="text-xs {{ $isCompleted ? 'text-emerald-600 dark:text-emerald-500' : 'text-neutral-500 dark:text-neutral-400' }}">
+                                    Пройдено {{ $item['completed_lessons'] }} из {{ $item['total_lessons'] }} уроков
+                                </p>
+                            @endif
                         </div>
                     </div>
 
-                    <div class="mt-8 pt-4 border-t border-neutral-200 dark:border-neutral-700 flex justify-between items-center">
+                    <div class="mt-8 pt-4 border-t flex justify-between items-center {{ $isCompleted ? 'border-emerald-200 dark:border-emerald-800/50' : 'border-neutral-200 dark:border-neutral-700' }}">
                         @if ($item['next_lesson'])
-                            <flux:button wire:navigate href="{{ route('lessons.show', [$item['course'], $item['next_lesson']]) }}" variant="primary" size="sm" class="w-full">
-                                {{ $item['completed_lessons'] > 0 ? 'Продолжить обучение' : 'Начать обучение' }}
+                            <flux:button wire:navigate href="{{ route('lessons.show', [$item['course'], $item['next_lesson']]) }}" variant="{{ $isNotStarted ? 'primary' : 'primary' }}" size="sm" class="w-full">
+                                {{ $isNotStarted ? 'Начать обучение' : 'Продолжить обучение' }}
                             </flux:button>
-                        @elseif ($item['percentage'] === 100)
+                        @elseif ($isCompleted)
                             <flux:button wire:navigate href="{{ route('courses.show', $item['course']) }}" variant="outline" size="sm" class="w-full">
-                                Посмотреть курс
+                                Посмотреть материалы
                             </flux:button>
                         @else
                             <flux:button wire:navigate href="{{ route('courses.show', $item['course']) }}" variant="primary" size="sm" class="w-full">

@@ -15,6 +15,8 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public ?User $student = null;
+    public string $statusFilter = 'all';
+    public string $sortOrder = 'progress_desc';
 
     public function mount(?User $student = null)
     {
@@ -51,6 +53,17 @@ class Dashboard extends Component
                 ->whereIn('lesson_id', $course->lessons()->pluck('id'))
                 ->count();
 
+            // Apply filter
+            if ($this->statusFilter === 'completed' && $percentage < 100) {
+                continue;
+            }
+            if ($this->statusFilter === 'not_started' && $percentage > 0) {
+                continue;
+            }
+            if ($this->statusFilter === 'in_progress' && ($percentage === 0 || $percentage === 100)) {
+                continue;
+            }
+
             $courseProgress[] = [
                 'course' => $course,
                 'total_lessons' => $totalLessons,
@@ -60,8 +73,21 @@ class Dashboard extends Component
             ];
         }
 
+        $courseProgress = collect($courseProgress);
+
+        // Apply sorting
+        if ($this->sortOrder === 'progress_desc') {
+            $courseProgress = $courseProgress->sortByDesc('percentage');
+        } elseif ($this->sortOrder === 'progress_asc') {
+            $courseProgress = $courseProgress->sortBy('percentage');
+        } elseif ($this->sortOrder === 'title_asc') {
+            $courseProgress = $courseProgress->sortBy(fn($item) => $item['course']->title);
+        } elseif ($this->sortOrder === 'title_desc') {
+            $courseProgress = $courseProgress->sortByDesc(fn($item) => $item['course']->title);
+        }
+
         return view('livewire.dashboard', [
-            'courseProgress' => collect($courseProgress),
+            'courseProgress' => $courseProgress->values(),
             'user' => $user,
         ]);
     }
